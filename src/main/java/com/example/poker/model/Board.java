@@ -20,6 +20,7 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "boardId")
     private int id;
 
     //db는 테이블의 값이 한개만 들어가야함. 그래서 배열이 안됨ㅋㅋ

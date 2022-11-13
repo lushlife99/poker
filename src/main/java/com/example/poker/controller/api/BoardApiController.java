@@ -32,11 +32,13 @@ public class BoardApiController {
         return new ResponseDto<Board>(HttpStatus.OK.value(), board);
     }
 
+
     @PostMapping("/api/board/{id}")
-    public ResponseDto<Board> 게임시작(@PathVariable int id){
-        playerService.게임입장(id);
+    public ResponseDto<Board> gameJoin(@PathVariable int id){
+        Board board = playerService.게임입장(id);
         return new ResponseDto<Board>(HttpStatus.OK.value(), board);
     }
+
 
 
 }

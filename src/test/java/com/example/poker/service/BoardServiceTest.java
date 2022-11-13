@@ -4,6 +4,7 @@ import com.example.poker.model.Board;
 import com.example.poker.model.Player;
 import com.example.poker.repository.PlayerRepository;
 import com.example.poker.repository.BoardRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -49,6 +50,7 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("테이블 세팅 테스트")
+    @Disabled
     public void test2(){
         Player player1 = new Player();
         player1.setUsername("user1");

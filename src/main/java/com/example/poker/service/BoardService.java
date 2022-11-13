@@ -18,10 +18,9 @@ public class BoardService {
 
 
     @Transactional
-    public Board 바이인(Board board, Player player){
-        List<Player> players= board.getPlayer();
-        players.add(player);
-        board.setPlayer(players);
+    public Board 바이인(Player player){
+        Board board = player.getBoard();
+        board.setTotal_player(board.getTotal_player()+1);
         boardRepository.save(board);
         return board;
     }
