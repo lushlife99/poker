@@ -1,0 +1,52 @@
+package com.example.poker.service;
+
+
+import com.example.poker.model.Player;
+import com.example.poker.model.Board;
+import com.example.poker.repository.PlayerRepository;
+import com.example.poker.repository.BoardRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class PlayerService {
+
+    private final PlayerRepository playerRepository;
+    private final BoardRepository boardRepository;
+
+    private BoardService boardService;
+
+    @Transactional
+    public Board 게임입장(int id){
+        Player player = playerRepository.findById(id).get();
+
+        List<Board> boards = boardRepository.findAll();
+        Board board = boards.get(1);
+        for(int i = 1; i < boards.size(); i++) {
+            board = boards.get(i);
+            if(board.getTotal_player()<6)
+                break;
+        }
+        if(board.getTotal_player()==6){
+            board = boardService.테이블추가();
+        }
+        boardService.바이인(board, player);
+        player.setStack(300000);
+        player.setMoney(player.getMoney()-300000);
+
+        return board;
+    }
+
+    @Transactional
+    public void 타임아웃(int id){
+        Player player = playerRepository.findById(id).get();
+        player.setFold(1);
+    }
+
+}
+
+
