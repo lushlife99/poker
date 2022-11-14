@@ -11,8 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardBetRequestDto {
-
-
     private int id;
     //db는 테이블의 값이 한개만 들어가야함. 그래서 배열이 안됨ㅋㅋ
     //그래서 CARD 12345로 받음.
