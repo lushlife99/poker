@@ -31,7 +31,7 @@ public class Board {
     private int card4;
     private int card5;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties({"board"})
     private List<Player> player;
 

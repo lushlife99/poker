@@ -46,12 +46,12 @@ public class PlayerService {
     }
 
     @Transactional
-    public Board 바이인(Player player){
+    public Board 바이인(int id){
+        Player player = playerRepository.findById(id).get();
         Board board = player.getBoard();
         board.setTotal_player(board.getTotal_player()+1);
         player.setStack(300000);
         player.setMoney(player.getMoney()-300000);
-        playerRepository.save(player);
         boardRepository.save(board);
         return board;
     }
@@ -69,6 +69,15 @@ public class PlayerService {
         Player player = playerRepository.findById(id).get();
         player.setFold(1);
     }
+
+    @Transactional
+    public Player 게임퇴장(int id){
+        Player player = playerRepository.findById(id).get();
+        player.setBoard(null);
+        playerRepository.save(player);
+        return player;
+    }
+
 
 }
 

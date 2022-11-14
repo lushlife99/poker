@@ -1,0 +1,67 @@
+.start {
+    text-align: center;
+    font-size:60px;
+    color:red;
+
+
+}
+p {
+
+}
+.underline a {
+    text-decoration: none;
+    margin:auto;
+}
+.player {
+    display: flex;
+    background-image: url(input.png);
+}
+
+.butn {
+    margin:auto;
+    padding: 170px;
+}
+
+.butn .p1 {
+    width : 350px;
+    display: block;
+    height : 50px;
+    font-size : 25px;
+    font-family: Impact,Charcoal,sans-serif;
+
+}
+.butn .p2 {
+    width : 350px;
+    display: block;
+    height : 50px;
+    font-size : 25px;
+    font-family: Impact,Charcoal,sans-serif;
+}
+.butn .p3 {
+    width : 350px;
+    display: block;
+    height : 50px;
+    font-size : 25px;
+    font-family: Impact,Charcoal,sans-serif;
+}
+.butn .p4 {
+    width : 350px;
+    display: block;
+    height : 50px;
+    font-size : 25px;
+    font-family: Impact,Charcoal,sans-serif;
+}
+.butn .p5 {
+    width : 350px;
+    display: block;
+    height : 50px;
+    font-size : 25px;
+    font-family: Impact,Charcoal,sans-serif;
+}
+.butn .p6 {
+    width : 350px;
+    display: block;
+    height : 50px;
+    font-size : 25px;
+    font-family: Impact,Charcoal,sans-serif;
+}

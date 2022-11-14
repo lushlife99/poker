@@ -5,6 +5,7 @@ import com.example.poker.model.Board;
 import com.example.poker.repository.PlayerRepository;
 import com.example.poker.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,6 +17,8 @@ public class BoardService {
     private final PlayerRepository playerRepository;
     private final BoardRepository boardRepository;
 
+    @Autowired
+    private GameService gameService;
 
     @Transactional
     public Board 바이인(Player player){
@@ -36,6 +39,24 @@ public class BoardService {
         board.setBb(board.getBb()+1%board.getTotal_player());
         board.setSb(board.getSb()+1%board.getTotal_player());
         board.setBet(0);
+        for(int i = 0; i < board.getTotal_player(); i++){
+            board.getPlayer().get(i).setFold(0);
+            board.getPlayer().get(i).setCal(0);
+            board.getPlayer().get(i).setCard1(0);
+            board.getPlayer().get(i).setCard2(0);
+            board.getPlayer().get(i).setDrawWho(0);
+            board.getPlayer().get(i).setJokBo(0);
+            board.getPlayer().get(i).setTotal_cal(0);
+            board.getPlayer().get(i).setIsDraw(false);
+        }
+        board.setBtn(board.getBtn()%board.getTotal_player());
+        board.setBetPos(board.getBtn());
+        board.setBet(0);
+        board.setAmountOfPot(0);
+        board.setBb(board.getBb()%board.getTotal_player());
+        board.setBetAsk(0);
+        board.setPhaseNum(1);
+        board.setSb(board.getSb()%board.getTotal_player());
         boardRepository.save(board);
 
     }
@@ -88,6 +109,12 @@ public class BoardService {
     @Transactional
     public Board 액션(Board board){
         boardRepository.save(board);
+        return board;
+    }
+    @Transactional
+    public Board 게임시작(Board board){
+        테이블세팅(board);
+        gameService.카드돌리기(board);
         return board;
     }
 

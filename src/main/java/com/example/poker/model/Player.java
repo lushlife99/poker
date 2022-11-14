@@ -27,7 +27,7 @@ public class Player {
     @Column(nullable = false, length = 200)
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name="boardId")
     private Board board;
 

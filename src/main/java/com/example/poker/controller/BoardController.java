@@ -25,6 +25,11 @@ public class BoardController {
     private PlayerService playerService;
     private UpperGameService upperGameService;
 
+    @GetMapping("")
+    public String mainPage(){
+        return "Game";
+    }
+
     @PutMapping("/test1")
     public String gameStart(Model model, @PathVariable int id){
         Board board = playerService.게임입장(id);

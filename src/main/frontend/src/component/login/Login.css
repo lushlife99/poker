@@ -1,0 +1,21 @@
+.login {
+    background-color: black;
+    color: red;
+    text-align: center;
+    padding: 20px;
+    font-size: 70px;
+    font-weight:bold;
+}
+.loginInform {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:20px;
+}
+.btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:20px;
+    
+}

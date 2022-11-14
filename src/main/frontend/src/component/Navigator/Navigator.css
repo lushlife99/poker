@@ -1,0 +1,15 @@
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:20px;
+
+}
+.btnstyle {
+    width:200px;
+    height:40px;
+    font-size: 25px;
+}
+.main {
+    padding: 20px;
+}

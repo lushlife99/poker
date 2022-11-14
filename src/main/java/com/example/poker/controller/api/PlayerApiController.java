@@ -29,16 +29,18 @@ public class PlayerApiController {
 
     @PostMapping("/player/join/{name}")
     public ResponseDto<Player> SignUp(@PathVariable String name){
-      return new ResponseDto<Player>(HttpStatus.OK.value(),  playerService.회원가입(name));
+        return new ResponseDto<Player>(HttpStatus.OK.value(),  playerService.회원가입(name));
     }
 
+    @CrossOrigin
     @PutMapping("/game/joinGame/{id}")
     public ResponseDto<Board> JoinGame(@PathVariable int id){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), playerService.게임입장(id));
+        playerService.게임입장(id);
+        return new ResponseDto<Board>(HttpStatus.OK.value(), playerService.바이인(id));
     }
 
-    @PutMapping("/game/buyin")
-    public ResponseDto<Board> BuyIn(@RequestBody Player player){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), playerService.바이인(player));
+    @PutMapping("/game/exit/{id}")
+    public ResponseDto<Player> GameExit(@PathVariable int id){
+        return new ResponseDto<Player>(HttpStatus.OK.value(), playerService.게임퇴장(id));
     }
 }
