@@ -25,14 +25,22 @@ public class UpperGameService {
         Board board = boardRepository.findById(id).get();
         if(board.getTotal_player() > 1){
             gameService.카드돌리기(board);
-
         }
+        boardRepository.save(board);
         return board;
     }
     @Transactional
-    public Board 액션(Board board){ //콜 받았을 때 실행
-        boardService.액션카운트증가(board);
+    public Board 액션(int id){ //콜 받았을 때 실행
+        Board board = boardRepository.findById(id).get();
         boardService.액션(board);
+        if(boardService.액션카운트증가(board)){
+            //아직 페이즈 안끝남
+           // 여기서부터 다시 만들기..
+        }
+        else{
+            //페이즈 끝남.
+        }
+
         return board;
     }
 

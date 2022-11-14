@@ -32,9 +32,13 @@ public class BoardApiController {
         return new ResponseDto<Board>(HttpStatus.OK.value(), board);
     }
 
+    @PutMapping("/api/board/gameStart/{id}")
+    public ResponseDto<Board> gameStart(@PathVariable int id){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임시작(id));
+    }
 
-
-
-
-
+    @PutMapping("/api/board/betting/{id}")
+    public ResponseDto<Board> betting(@PathVariable int id){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.액션(id));
+    }
 }

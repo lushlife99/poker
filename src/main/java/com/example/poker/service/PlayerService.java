@@ -48,6 +48,9 @@ public class PlayerService {
     @Transactional
     public Board 바이인(int id){
         Player player = playerRepository.findById(id).get();
+        if(player.getBoard() != null){
+            return player.getBoard();
+        }
         Board board = player.getBoard();
         board.setTotal_player(board.getTotal_player()+1);
         player.setStack(300000);

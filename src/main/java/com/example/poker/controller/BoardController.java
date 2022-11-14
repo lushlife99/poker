@@ -42,11 +42,7 @@ public class BoardController {
         model.addAttribute("board");
         return "";  //베팅뷰 리턴.
     }
-    @PutMapping("베팅하는사람이 베팅 끝날때 페이지 요청하는 url")
-    public String BetPosBetFinish(Model model, @RequestBody Board board){
-        model.addAttribute("board",  upperGameService.액션(board));
-        return "";  //기다리는뷰 리턴.
-    }
+
     @PutMapping("기다리는사람에게 베팅상황을 보여주는 페이지를 요청하는 url")
     public String WaitPosBetFinish(Model model, @RequestBody Board board){
         model.addAttribute("board");

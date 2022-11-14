@@ -117,7 +117,6 @@ const Free = () => {
                 <img id ="img2M2" src ="/images/backimage.png"/>
                 <Bet/>
             </div>
-            {alert(data.data.player[0].username)}
 
         </div>
     );
