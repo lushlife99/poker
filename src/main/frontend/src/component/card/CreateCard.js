@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './CreateCard.css';
-import Free from '../play/Free';
+import Free from '../play/twoPlayer/Free';
 
 const CreateCard = () => {
 

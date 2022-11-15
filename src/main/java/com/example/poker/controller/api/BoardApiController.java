@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 public class BoardApiController {
 
     @Autowired
@@ -41,4 +42,12 @@ public class BoardApiController {
     public ResponseDto<Board> betting(@PathVariable int id){
         return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.액션(id));
     }
+
+    @PutMapping("/api/board/phaseEnd/{id}")
+    public ResponseDto<Board> phaseEnd(@PathVariable int id){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.페이즈종료(id));
+    }
+
+    //@PutMapping("/api/board/phaseStart/{id}")
+
 }

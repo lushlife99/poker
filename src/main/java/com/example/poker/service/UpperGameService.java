@@ -5,6 +5,7 @@ import com.example.poker.model.Board;
 import com.example.poker.repository.PlayerRepository;
 import com.example.poker.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,8 +16,11 @@ public class UpperGameService {
     private final PlayerRepository playerRepository;
     private final BoardRepository boardRepository;
 
+    @Autowired
     private BoardService boardService;
+    @Autowired
     private PlayerService playerService;
+    @Autowired
     private GameService gameService;
 
 
@@ -38,7 +42,7 @@ public class UpperGameService {
             return board;
         }
         else{
-            페이즈종료(board);
+            페이즈종료(id);
             return board;
         }
     }
@@ -52,11 +56,13 @@ public class UpperGameService {
 
     @Transactional
     public Board 폴드(Board board){
-        boardService.
+
+        return board;
     }
 
     @Transactional
-    public Board 페이즈종료(Board board){
+    public Board 페이즈종료(int id){
+        Board board = boardRepository.findById(id).get();
         if(board.getPhaseNum() == 5){
             게임끝(board);
         }

@@ -1,10 +1,11 @@
-import React, {useState,useEffect} from 'react';
-import './Free.css';
-import axios from 'axios';
-import Bet from './Bet';
-import Bet2 from './Bet2';
-import CreateCard from '../card/CreateCard';
-const Free = () => {
+import React, {useEffect, useState} from 'react';
+import Bet2 from "../Bet2";
+import Bet from "../Bet";
+import './StartTwo.css';
+import axios from "axios";
+import {useLocation} from "react-router";
+
+const StartTwo = () => {
     const [images,setImages] = useState([
         {id :0, src: '/images/ace_of_spades.png'},
         {id :1, src: '/images/2_of_spades.png'},
@@ -59,42 +60,18 @@ const Free = () => {
         {id :50, src: '/images/queen_of_diamonds.png'},
         {id :51, src: '/images/king_of_diamonds.png'},
     ]);
-    useEffect(()=> {
-        receiveData(); //게임 시작 우선순위, 플레이어번호, 카드1,2 ,
-    },[]);
 
+    const id= 1;
+    const {data} = useLocation();
+
+
+   // const {card} = useLocation();
     //카드 번호 입력후 요청 관련 함수들
-    const [data,setData] = useState();
-    const receiveData = ()=>{   //서버에 데이터 요청
-        axios.put('http://localhost:8080/game/joinGame/1').then((reponse) => {
-            console.log('데이터요청!');
-            console.log(reponse);
-            setData(reponse.data);
-        });
-    }
-    //입력한 2개의 데이터 서버에 요청(등록)
-    const sendData = () => {   //아직 미지수
-        axios.post('https://jsonplaceholder.typicode.com/todos/1', {
-            cardNumber
-        }).then(response => {
-            console.log(response)
-        })
-    }
-    const [cardNumber,setcardNumber] = useState({   //입력한 2개의 카드 숫자가 저장될 공간
-        card1:"",
-        card2:"",
-    });
-    const handleClick1 = (e) => {   //내가 입력한 카드숫자 뒤집는것 ,잠깐 랜덤확인을 위해 변수 변경
-        document.getElementById("img1").src = images[cardNumber.card1].src;
-    }
-    const handleClick2 = (e) => {  //내가 입력한 카드숫자 뒤집는것
-        document.getElementById("img2").src = images[cardNumber.card2].src;
-    }
     setTimeout(function() {
-        document.getElementById("img2M1").src =images[data.data.player[1].card1].src;  //인덱스는 받아온데이터 card1으로 수정
+       document.getElementById("img2M1").src =images[data.player[0].card1].src;  //인덱스는 받아온데이터 card1으로 수정
     },1000);  //게임 시작 후 프리플랍시 카드 뒤집기
     setTimeout(function() {
-        document.getElementById("img2M2").src= images[data.data.player[1].card2].src;
+       document.getElementById("img2M2").src= images[data.player[0].card2].src;
     },1200); //게임 시작 후 프리플랍시 카드 뒤집기
     return (
         <div>
@@ -102,7 +79,6 @@ const Free = () => {
                 <img className="gamer2_1" src="/images/player.png"/>
                 <img id ="img2D1" src ="/images/backimage.png"/>
                 <img id ="img2D2" src ="/images/backimage.png"/>
-                <Bet2/>
             </div>
             <div className = "set2 pullDown">
                 <img id="rc2_1" className="c2" src ="/images/backimage.png"/>
@@ -121,4 +97,5 @@ const Free = () => {
         </div>
     );
 };
-export default Free;
+
+export default StartTwo;

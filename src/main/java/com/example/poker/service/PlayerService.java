@@ -25,14 +25,18 @@ public class PlayerService {
     @Transactional
     public Board 게임입장(int id) {
         Player player = playerRepository.findById(id).get();
+        if(player.getBoard() != null){
+            return player.getBoard();
+        }
 
         List<Board> boards = boardRepository.findAll();
-        Board board = new Board();
+        Board board;
         if(boards.size() == 0){
             board = boardService.테이블추가();
         }
         else{
-            for (int i = 1; i < boards.size(); i++) {
+            board = boards.get(0);
+            for (int i = 0; i < boards.size(); i++) {
                 board = boards.get(i);
                 if (board.getTotal_player() < 6)
                     break;
@@ -41,18 +45,16 @@ public class PlayerService {
                 board = boardService.테이블추가();
             }
         }
+        board.setTotal_player(board.getTotal_player()+1);
         player.setBoard(board);
+        playerRepository.save(player);
         return board;
     }
 
     @Transactional
     public Board 바이인(int id){
         Player player = playerRepository.findById(id).get();
-        if(player.getBoard() != null){
-            return player.getBoard();
-        }
         Board board = player.getBoard();
-        board.setTotal_player(board.getTotal_player()+1);
         player.setStack(300000);
         player.setMoney(player.getMoney()-300000);
         boardRepository.save(board);
@@ -76,6 +78,7 @@ public class PlayerService {
     @Transactional
     public Player 게임퇴장(int id){
         Player player = playerRepository.findById(id).get();
+        player.getBoard().setTotal_player(player.getBoard().getTotal_player()-1);
         player.setBoard(null);
         playerRepository.save(player);
         return player;

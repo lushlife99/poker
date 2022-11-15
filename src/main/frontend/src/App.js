@@ -11,12 +11,13 @@ import Server from "./Server";
 import Hello from "./component/Hello/Hello";
 import Poker from "./component/play/Poker";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Free from './component/play/Free.js';
+import Free from './component/play/twoPlayer/Free.js';
 import Three from './component/play/Three.js';
 import Four from './component/play/Four.js';
 import Five from './component/play/Five.js';
 import Six from './component/play/Six.js';
 import Wait3 from './component/play/Wait3';
+import StartTwo from "./component/play/twoPlayer/StartTwo";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path = "/five" exact = {true} element = {<Five/>}/>
         <Route path = "/six" exact ={true} element = {<Six/>}/>
         <Route path = "/wait" exact={true} element = {<Wait3/>}/>
+        <Route path ="/twoGame" exact={true} element={<StartTwo/>}/>
 
       </Routes>
   );
