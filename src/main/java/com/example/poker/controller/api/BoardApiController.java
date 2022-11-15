@@ -38,16 +38,35 @@ public class BoardApiController {
         return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임시작(id));
     }
 
-    @PutMapping("/api/board/betting/{id}")
-    public ResponseDto<Board> betting(@PathVariable int id){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.액션(id));
+    @PutMapping("/api/board/callBetting")
+    public ResponseDto<Board> callBetting(@RequestBody Board board){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.액션(board));
     }
 
-    @PutMapping("/api/board/phaseEnd/{id}")
-    public ResponseDto<Board> phaseEnd(@PathVariable int id){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.페이즈종료(id));
+    @PutMapping("/api/board/raiseBetting")
+    public ResponseDto<Board> raiseBetting(@RequestBody Board board){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.레이즈액션(board));
     }
 
+    @PutMapping("/api/board/foldBetting")
+    public ResponseDto<Board> foldBetting(@RequestBody Board board){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.폴드(board));
+    }
+
+    @PutMapping("/api/board/phaseEnd")
+    public ResponseDto<Board> phaseEnd(@RequestBody Board board){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.페이즈종료(board));
+    }
+
+    @PutMapping("/api/board/winner")
+    public ResponseDto<Board> win(@RequestBody Board board){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임종료(board));
+    }
+
+    @PutMapping("/api/board/determineWinner")
+    public ResponseDto<Board> determineWinner(@RequestBody Board board){
+        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임끝(board));
+    }
     //@PutMapping("/api/board/phaseStart/{id}")
 
 }
