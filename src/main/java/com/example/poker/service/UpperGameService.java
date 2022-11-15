@@ -34,14 +34,13 @@ public class UpperGameService {
         Board board = boardRepository.findById(id).get();
         boardService.액션(board);
         if(boardService.액션카운트증가(board)){
-            //아직 페이즈 안끝남
-           // 여기서부터 다시 만들기..
+            gameService.다음베팅플레이어(board);
+            return board;
         }
         else{
-            //페이즈 끝남.
+            페이즈종료(board);
+            return board;
         }
-
-        return board;
     }
 
     @Transactional
@@ -49,6 +48,11 @@ public class UpperGameService {
         boardService.액션카운트초기화(board);
         boardService.액션(board);
         return board;
+    }
+
+    @Transactional
+    public Board 폴드(Board board){
+        boardService.
     }
 
     @Transactional

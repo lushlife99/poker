@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 public class PlayerApiController {
 
 
@@ -32,7 +33,7 @@ public class PlayerApiController {
         return new ResponseDto<Player>(HttpStatus.OK.value(),  playerService.회원가입(name));
     }
 
-    @CrossOrigin
+
     @PutMapping("/game/joinGame/{id}")
     public ResponseDto<Board> JoinGame(@PathVariable int id){
         playerService.게임입장(id);
@@ -43,4 +44,5 @@ public class PlayerApiController {
     public ResponseDto<Player> GameExit(@PathVariable int id){
         return new ResponseDto<Player>(HttpStatus.OK.value(), playerService.게임퇴장(id));
     }
+
 }

@@ -74,6 +74,26 @@ public class GameService {
         }
     }
 
+    @Transactional
+    public Board 다음베팅플레이어(Board board){
+        if (board.getBetAsk()==board.getTotal_player()){
+            return board;
+        }
+
+        int pos = board.getBetPos();
+        int fold;
+        while(true){
+            fold = board.getPlayer().get((++pos)%board.getTotal_player()).getFold();
+            if(fold == 0){
+                break;
+            }
+
+        }
+      board.setBetPos(pos%board.getTotal_player());
+        boardRepository.save(board);
+        return board;
+    }
+
     public boolean A검사(int card){
         if(card%13 == 0){
             return true;

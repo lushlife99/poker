@@ -61,13 +61,35 @@ public class BoardService {
 
     }
     @Transactional
-    public void 페이즈테이블세팅(Board board){
+    public Board 페이즈테이블세팅(Board board){
         board.setBet(0);
+        board.setPhaseNum(board.getPhaseNum()+1);
+        int betAsk = 0;
+        int betPos = board.getBtn();
+        boolean signal = false;
 
         for(int i = 0; i < board.getTotal_player(); i++){
-            board.getPlayer().get(i).setCal(0);
-        }
 
+            board.getPlayer().get(i).setTotal_cal(board.getPlayer().get(i).getTotal_cal()+
+                    board.getPlayer().get(i).getCal());
+            board.getPlayer().get(i).setCal(0);
+            if(board.getPlayer().get(i).getFold() != 0){
+                betAsk++;
+
+            }
+        }
+        for(int i = betPos; i < betPos+6; i++){
+            if(board.getPlayer().get(betPos%board.getTotal_player()).getFold() == 0){
+                break;
+            }
+            else{
+                betPos++;
+            }
+        }
+        board.setBetPos(betPos);
+        board.setBetAsk(betAsk);
+        boardRepository.save(board);
+        return board;
     }
 
     @Transactional
