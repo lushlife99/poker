@@ -31,7 +31,7 @@ public class PlayerApiController {
     @PostMapping("/player/join/{name}")
     @CrossOrigin
     public ResponseDto<Player> SignUp(@PathVariable String name){
-        return new ResponseDto<Player>(HttpStatus.OK.value(),  playerService.회원가입(name));
+        return new ResponseDto<Player>(playerService.회원가입(name));
     }
 
 
@@ -39,13 +39,13 @@ public class PlayerApiController {
     @CrossOrigin
     public ResponseDto<Board> JoinGame(@PathVariable int id){
         playerService.게임입장(id);
-        return new ResponseDto<Board>(HttpStatus.OK.value(), playerService.바이인(id));
+        return new ResponseDto<Board>(playerService.바이인(id));
     }
 
     @PutMapping("/game/exitGame/{id}")
     @CrossOrigin
     public ResponseDto<Player> GameExit(@PathVariable int id){
-        return new ResponseDto<Player>(HttpStatus.OK.value(), playerService.게임퇴장(id));
+        return new ResponseDto<Player>(playerService.게임퇴장(id));
     }
 
 }

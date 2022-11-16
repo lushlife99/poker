@@ -104,6 +104,14 @@ public class BoardService {
             }
         }
         board.setBetAsk(cnt);
+
+        cnt = 0;
+        while(true){
+            if(board.getPlayer().get((board.getBetPos()+(++cnt))%board.getTotal_player()).getFold() == 0){
+                break;
+            }
+        }
+        board.setBetPos(board.getBetPos()+cnt);
         boardRepository.save(board);
         if(cnt!=board.getTotal_player()){
             return true;
@@ -112,6 +120,12 @@ public class BoardService {
     }
     @Transactional
     public boolean 액션카운트증가(Board board){
+        int cnt = 0;
+        while(true){
+            if(board.getPlayer().get((board.getBetPos()+(++cnt))%board.getTotal_player()).getFold() == 0){
+                break;
+            }
+        }
         board.setBetAsk(board.getBetAsk()+1);
 
         if(board.getBetAsk() != board.getTotal_player()){

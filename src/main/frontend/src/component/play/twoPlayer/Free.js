@@ -17,12 +17,7 @@ const Free = () => {
             </div>
             <div className = "pad">
                 <button onClick={() => {
-                    axios.put(`http://localhost:8080/api/board/gameStart/${id}`).then((response) => {
-                        console.log('카드데이터요청!');
-                        console.log(response);
-                        setCard(response.data);
-                        navigate("/twoGame",{data:data});
-                    });
+                     navigate("/twoGame");
 
 
                 }}>게임시작</button>

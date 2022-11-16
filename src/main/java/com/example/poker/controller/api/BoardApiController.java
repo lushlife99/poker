@@ -30,42 +30,42 @@ public class BoardApiController {
     @PutMapping
     public ResponseDto<Board> gameEnd(@RequestBody Board board){
         upperGameService.게임끝(board);
-        return new ResponseDto<Board>(HttpStatus.OK.value(), board);
+        return new ResponseDto<Board>(board);
     }
 
     @PutMapping("/api/board/gameStart/{id}")
     public ResponseDto<Board> gameStart(@PathVariable int id){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임시작(id));
+        return new ResponseDto<Board>(upperGameService.게임시작(id));
     }
 
     @PutMapping("/api/board/callBetting")
     public ResponseDto<Board> callBetting(@RequestBody Board board){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.액션(board));
+        return new ResponseDto<Board>(upperGameService.액션(board));
     }
 
     @PutMapping("/api/board/raiseBetting")
     public ResponseDto<Board> raiseBetting(@RequestBody Board board){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.레이즈액션(board));
+        return new ResponseDto<Board>(upperGameService.레이즈액션(board));
     }
 
     @PutMapping("/api/board/foldBetting")
     public ResponseDto<Board> foldBetting(@RequestBody Board board){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.폴드(board));
+        return new ResponseDto<Board>(upperGameService.폴드(board));
     }
 
     @PutMapping("/api/board/phaseEnd")
     public ResponseDto<Board> phaseEnd(@RequestBody Board board){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.페이즈종료(board));
+        return new ResponseDto<Board>(upperGameService.페이즈종료(board));
     }
 
     @PutMapping("/api/board/winner")
     public ResponseDto<Board> win(@RequestBody Board board){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임종료(board));
+        return new ResponseDto<Board>(upperGameService.게임종료(board));
     }
 
     @PutMapping("/api/board/determineWinner")
     public ResponseDto<Board> determineWinner(@RequestBody Board board){
-        return new ResponseDto<Board>(HttpStatus.OK.value(), upperGameService.게임끝(board));
+        return new ResponseDto<Board>(upperGameService.게임끝(board));
     }
     //@PutMapping("/api/board/phaseStart/{id}")
 

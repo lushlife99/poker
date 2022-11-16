@@ -52,7 +52,7 @@ public class GameService {
         cnt=5;
         for(int i = 0; i < board.getTotal_player(); i++){
             board.getPlayer().get(i).setCard1(drawed_card[cnt++]);
-            board.getPlayer().get(i).setCard1(drawed_card[cnt++]);
+            board.getPlayer().get(i).setCard2(drawed_card[cnt++]);
         }
         board.setPhaseNum(2);
         boardRepository.save(board);
