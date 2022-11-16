@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React , {useState,useEffect} from 'react';
 import Wait3 from './Wait3';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -6,21 +6,20 @@ import axios from 'axios';
 const Bet = (props) => {
     const navigate = useNavigate();
     const {card,setCard} = props;
+    const axiosConfig = {
+        headers:{
+            "Content-Type": "application/json"
+        }
+    }
     //setCard(card.player[card.betPos].fold=2);
-    const {a,setA} =useState(0);
-    const foldClick = () => {
-        setCard(card.player[card.betPos].fold+2);
-        axios.put("http://localhost8080/api/board/foldBetting", {
-            card:card
-        }).then(function (response) {
-            console.log("데이터 전송")
-        })
+    const click = () => {
+        axios.put("http://localhost:8080/api/board/foldBetting",axiosConfig,{card:card});
     }
     return (
         <div>
             <button onClick={()=>
             {
-                foldClick();
+                click();
                 navigate("/wait2"); //대기뷰
             }}>폴드</button>
             <button onClick={()=> {
@@ -30,7 +29,7 @@ const Bet = (props) => {
             }}>체크</button>
             <button onClick={() => {
                 console.log('레이즈!');//선택할수 있게
-                let money = prompt('금액 입력'); //레이즈 값 서버에 요청
+                let money = prompt('금액 입력'); //레이즈 값 서버에 요청?
                 navigate("/wait2"); //대기뷰
             }}>레이즈</button>
 

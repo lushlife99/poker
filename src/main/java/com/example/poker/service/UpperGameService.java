@@ -55,8 +55,15 @@ public class UpperGameService {
 
     @Transactional
     public Board 폴드(Board board){
-
-        return board;
+        boardService.액션(board);
+        if(boardService.액션카운트증가(board)){
+            gameService.다음베팅플레이어(board);
+            return board;
+        }
+        else{
+            페이즈종료(board);
+            return board;
+        }
     }
 
     @Transactional

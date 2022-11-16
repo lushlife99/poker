@@ -50,6 +50,7 @@ public class BoardApiController {
 
     @PutMapping("/api/board/foldBetting")
     public ResponseDto<Board> foldBetting(@RequestBody Board board){
+        System.out.println("total_player : " + board.getTotal_player()+"   boardId : "+board.getId());
         return new ResponseDto<Board>(upperGameService.폴드(board));
     }
 
