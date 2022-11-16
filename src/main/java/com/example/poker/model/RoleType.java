@@ -1,5 +1,5 @@
-package com.example.poker.model;
-
-public enum RoleType {
-    User,Admin
-}
+//package com.example.poker.model;
+//
+//public enum RoleType {
+//    User,Admin
+//}

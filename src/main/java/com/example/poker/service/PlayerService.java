@@ -1,15 +1,20 @@
 package com.example.poker.service;
 
 
+import com.example.poker.dto.ResponseDto;
 import com.example.poker.model.Player;
 import com.example.poker.model.Board;
+import com.example.poker.model.RoleType;
+import com.example.poker.model.User;
 import com.example.poker.repository.PlayerRepository;
 import com.example.poker.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -84,6 +89,22 @@ public class PlayerService {
         return player;
     }
 
+    // playerApiController -> 회원가입
+    @Transactional()
+    public void save(Player player){
+        try {
+            playerRepository.save(player);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e + "error발생 ");
+        }
+    }
+
+    //login
+    @Transactional(readOnly = true)
+    public Player login(Player player){
+        return playerRepository.findByUsernameAndPassword(player.getUsername(), player.getPassword());
+    }
 
 }
 

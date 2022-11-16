@@ -42,6 +42,7 @@ public class Player {
 
     private int total_cal; // 모든 페이즈에서 플레이어가 베팅한 크기.
 
+    @Column
     private int money; // 게임머니. 게임머니>=stack. 처음에 입장할 때 게임머니에서 차감하고 그만큼 스택에 추가됨.
 
     @JsonProperty("jokBo")
