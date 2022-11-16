@@ -1,11 +1,10 @@
+
 package com.example.poker.service;
 
 
 import com.example.poker.dto.ResponseDto;
 import com.example.poker.model.Player;
 import com.example.poker.model.Board;
-import com.example.poker.model.RoleType;
-import com.example.poker.model.User;
 import com.example.poker.repository.PlayerRepository;
 import com.example.poker.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +69,7 @@ public class PlayerService {
         Player player = new Player();
         player.setUsername(name);
         player.setPassword("1234");
+        player.setIsDraw(false);
         playerRepository.save(player);
         return player;
     }

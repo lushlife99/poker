@@ -3,8 +3,6 @@ package com.example.poker.controller.api;
 import com.example.poker.dto.ResponseDto;
 import com.example.poker.model.Board;
 import com.example.poker.model.Player;
-import com.example.poker.model.RoleType;
-import com.example.poker.model.User;
 import com.example.poker.service.BoardService;
 import com.example.poker.service.GameService;
 import com.example.poker.service.PlayerService;

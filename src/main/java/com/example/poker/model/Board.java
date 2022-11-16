@@ -3,16 +3,14 @@ package com.example.poker.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -35,6 +33,7 @@ public class Board {
     private int card5;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("board")
     private List<Player> player;
 
     @JsonProperty("total_player")

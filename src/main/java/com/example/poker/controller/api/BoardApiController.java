@@ -2,13 +2,11 @@ package com.example.poker.controller.api;
 
 import com.example.poker.dto.ResponseDto;
 import com.example.poker.model.Board;
-import com.example.poker.model.Player;
 import com.example.poker.service.GameService;
 import com.example.poker.service.BoardService;
 import com.example.poker.service.PlayerService;
 import com.example.poker.service.UpperGameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,35 +37,35 @@ public class BoardApiController {
     }
 
     @PutMapping("/api/board/callBetting")
-    public ResponseDto<Board> callBetting(@RequestBody Board board){
-        return new ResponseDto<Board>(upperGameService.액션(board));
+    public ResponseDto<Board> callBetting(@RequestBody ResponseDto<Board> board){
+        return new ResponseDto<Board>(upperGameService.액션(board.getData()));
     }
 
     @PutMapping("/api/board/raiseBetting")
-    public ResponseDto<Board> raiseBetting(@RequestBody Board board){
-        return new ResponseDto<Board>(upperGameService.레이즈액션(board));
+    public ResponseDto<Board> raiseBetting(@RequestBody ResponseDto<Board> board){
+        return new ResponseDto<Board>(upperGameService.레이즈액션(board.getData()));
     }
 
     @PutMapping("/api/board/foldBetting")
-    public ResponseDto<Board> foldBetting(@RequestBody Board board){
-        System.out.println("total_player : " + board.getTotal_player()+"   boardId : "+board.getId());
-        return new ResponseDto<Board>(upperGameService.폴드(board));
+    public ResponseDto<Board> foldBetting(@RequestBody ResponseDto<Board> board){
+        System.out.println("토탈플레이어 : " + board.getData().getTotal_player());
+        return new ResponseDto<Board>(upperGameService.폴드(board.getData()));
     }
 
     @PutMapping("/api/board/phaseEnd")
-    public ResponseDto<Board> phaseEnd(@RequestBody Board board){
-        return new ResponseDto<Board>(upperGameService.페이즈종료(board));
+    public ResponseDto<Board> phaseEnd(@RequestBody ResponseDto<Board> board){
+        return new ResponseDto<Board>(upperGameService.페이즈종료(board.getData()));
     }
 
     @PutMapping("/api/board/winner")
-    public ResponseDto<Board> win(@RequestBody Board board){
-        return new ResponseDto<Board>(upperGameService.게임종료(board));
+    public ResponseDto<Board> win(@RequestBody ResponseDto<Board> board){
+        return new ResponseDto<Board>(upperGameService.게임종료(board.getData()));
     }
 
     @PutMapping("/api/board/determineWinner")
-    public ResponseDto<Board> determineWinner(@RequestBody Board board){
-        return new ResponseDto<Board>(upperGameService.게임끝(board));
+    public ResponseDto<Board> determineWinner(@RequestBody ResponseDto<Board> board){
+        return new ResponseDto<Board>(upperGameService.게임끝(board.getData()));
     }
-    //@PutMapping("/api/board/phaseStart/{id}")
+
 
 }

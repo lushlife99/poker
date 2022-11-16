@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 package com.example.poker.controller.api;
 
 
@@ -30,7 +30,7 @@ public class UserApiController {
         //여기서 Jackson 이라는 라이브러리가 객체를 리턴할 때 json 으로 바꿔서 전달해준다.
     }
 }
-=======
+
 //package com.example.poker.controller.api;
 //
 //
@@ -77,4 +77,5 @@ public class UserApiController {
 //
 //    }
 //}
->>>>>>> 1eca21533634aedbcb2bb551717510b9204bab3b
+
+ */

@@ -5,21 +5,28 @@ import axios from 'axios';
 
 const Bet = (props) => {
     const navigate = useNavigate();
-    const {card,setCard} = props;
+    const {data,setData} = props;
     const axiosConfig = {
         headers:{
             "Content-Type": "application/json"
         }
     }
-    //setCard(card.player[card.betPos].fold=2);
-    const click = () => {
-        axios.put("http://localhost:8080/api/board/foldBetting",axiosConfig,{card:card});
-    }
+
+
+    /*const click = () => {
+        axios.put('http://localhost:8080/api/board/foldBetting',{        // PUT
+            data: data.data,
+        })
+    }*/
     return (
         <div>
             <button onClick={()=>
             {
-                click();
+                axios.put('http://localhost:8080/api/board/foldBetting',{        // PUT
+                    data: data,
+                })
+
+                console.log(data);
                 navigate("/wait2"); //대기뷰
             }}>폴드</button>
             <button onClick={()=> {
@@ -32,8 +39,6 @@ const Bet = (props) => {
                 let money = prompt('금액 입력'); //레이즈 값 서버에 요청?
                 navigate("/wait2"); //대기뷰
             }}>레이즈</button>
-
-
         </div>
     );
 };
