@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.example.poker.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
+
 // 자동으로 컴포넌트 스캔을 통해 자동으로 빈에 띄어줌
 
 
@@ -24,6 +26,12 @@ public class UserService {
             e.printStackTrace();
             System.out.println(e + "error발생 씨발 ");
         }
+    }
+
+    @Transactional(readOnly = true) //select
+    public User login(User user){
+
+        return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
     }
 
 
