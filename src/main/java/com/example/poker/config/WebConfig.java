@@ -1,4 +1,4 @@
-// 이건 마지막에 해보자 proxy 개발 , CORS Spring 설정 = 근본적인 해결책 
+// 이건 마지막에 해보자 proxy 개발 , CORS Spring 설정 = 근본적인 해결책
 
 //package com.example.poker.config;
 //
