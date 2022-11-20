@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 
 @Data
@@ -56,6 +57,7 @@ public class Player {
     @CreationTimestamp
     @JsonProperty("createDate")
     private Timestamp createDate;
+
 
     //private String oauth; // -> 구글 카카오
 }

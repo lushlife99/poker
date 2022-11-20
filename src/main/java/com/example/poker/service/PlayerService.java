@@ -64,12 +64,13 @@ public class PlayerService {
         boardRepository.save(board);
         return board;
     }
-
-    public  Player 회원가입(String name){
+    @Transactional
+    public  Player 회원가입(Player pl){
         Player player = new Player();
-        player.setUsername(name);
-        player.setPassword("1234");
+        player.setUsername(pl.getUsername());
+        player.setPassword(pl.getPassword());
         player.setIsDraw(false);
+        player.setMoney(1000000);
         playerRepository.save(player);
         return player;
     }

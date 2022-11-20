@@ -31,6 +31,7 @@ public class BoardService {
     @Transactional
     public Board 테이블추가(){
         Board board = new Board();
+        board.setPhaseNum(1);
         return board;
     }
 

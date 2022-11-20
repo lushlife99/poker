@@ -102,7 +102,4 @@ public class UpperGameService {
         return board;
     }
 
-
-
-
 }

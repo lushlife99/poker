@@ -2,12 +2,18 @@ package com.example.poker.controller.api;
 
 import com.example.poker.dto.ResponseDto;
 import com.example.poker.model.Board;
+import com.example.poker.model.Player;
+import com.example.poker.repository.BoardRepository;
+import com.example.poker.repository.PlayerRepository;
 import com.example.poker.service.GameService;
 import com.example.poker.service.BoardService;
 import com.example.poker.service.PlayerService;
 import com.example.poker.service.UpperGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @CrossOrigin
@@ -25,6 +31,11 @@ public class BoardApiController {
     @Autowired
     private UpperGameService upperGameService;
 
+    @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
     @PutMapping
     public ResponseDto<Board> gameEnd(@RequestBody Board board){
         upperGameService.게임끝(board);
@@ -67,5 +78,17 @@ public class BoardApiController {
         return new ResponseDto<Board>(upperGameService.게임끝(board.getData()));
     }
 
+    @PutMapping("/api/board/{id}")
+    public DeferredResult<Board> joinGame(@PathVariable int id, HttpSession session){
+        DeferredResult<Board> output = new DeferredResult<>();
+        try{
+            Thread.sleep(2000); //2초 기다림
+            Board board = boardRepository.findById(id).get();
+            output.setResult(board);
+        } catch (Exception e) {
+
+        }
+        return output;
+    }
 
 }
