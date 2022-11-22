@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import Bet2 from "../Bet2";
-import Bet from "../Bet";
-import './StartTwo.css';
-import axios from "axios";
-import {useLocation} from "react-router";
-import {Provider} from 'react-redux';
+import React, {useCallback,useEffect, useState,useRef} from 'react';
+import axios from 'axios';
+
+import Free from './Free';
+
 const StartTwo = () => {
     const [images,setImages] = useState([
         {id :0, src: '/images/ace_of_spades.png'},
@@ -60,54 +58,64 @@ const StartTwo = () => {
         {id :50, src: '/images/queen_of_diamonds.png'},
         {id :51, src: '/images/king_of_diamonds.png'},
     ]);
-    const [data,setData] = useState();
-    const id =1;
-
-    useEffect(()=> {
-        axios.put(`http://localhost:8080/api/board/gameStart/1`).then((response) => {
-            console.log('카드데이터요청!');
-            console.log(response);
-            setData(response.data.data);
-        });
+    const [visible,setVisible] = useState(true);  //버튼 사라지게하는 상태값
+    const [show,setShow] = useState(false); //버튼 누를시 카드 보이게
+    const [data,setData] = useState(null);
+    const [bet,setBet] = useState(false);
+    const [betDiff,setDiff] = useState(false);
+    const getData = async () => {
+        const datas = await axios.put('http://localhost:8080/board/gameStart/1');
+        setData(datas.data);
+    };
+    useEffect(() => {
+        getData();
     },[]);
-    const [show,setShow] = useState(false);
-    //카드 번호 입력후 요청 관련 함수들
-    setTimeout(function() {
-        //document.getElementById("img2M1").src =images[card.data.player[0].card1].src;  //인덱스는 받아온데이터 card1으로 수정
-        //alert(card.data.total_player);
-    },1000);  //게임 시작 후 프리플랍시 카드 뒤집기
-    setTimeout(function() {
-        // document.getElementById("img2M2").src= images[card.data.player[0].card2].src;
-    },1200); //게임 시작 후 프리플랍시 카드 뒤집기
-    setTimeout(function () {
-        setShow(true);
-    },2500);
-    return (
-        <div>
-            <div className="g2p1">
-                <img className="gamer2_1" src="/images/player.png"/>
-                <img id ="img2D1" src ="/images/backimage.png"/>
-                <img id ="img2D2" src ="/images/backimage.png"/>
-            </div>
-            <div className = "set2 pullDown">
+    const reverseCard1 = () => { //게임 시작 후 프리플랍시 카드 뒤집기
+        setTimeout(function() {
+            document.getElementById("img2M1").src =images[data.data.player[0].card1].src;  //card.data.player[0].card1
+            // console.log(data.id);
+        },1500);
+    }//게임 시작 후 프리플랍시 카드 뒤집기
+    const reverseCard2 = () => {
+        setTimeout(function () {
+            document.getElementById("img2M2").src= images[data.data.player[0].card2].src;  //card.data.player[0].card2
+        },1900);
+    }
+    const cardImg = () => {
+        return (
+            <div className="set2 pullDown">
                 <img id="rc2_1" className="c2" src ="/images/backimage.png"/>
                 <img id="rc2_2" className="c2" src ="/images/backimage.png"/>
                 <img id="rc2_3" className="c2" src ="/images/backimage.png"/>
                 <img id="rc2_4" className="c2" src ="/images/backimage.png"/>
                 <img id="rc2_5" className="c2" src ="/images/backimage.png"/>
             </div>
-            <div className ="g2p2">
-                <img className="gamer2_2" src="/images/player.png"/>
+        )
+    }
+    const playerCard1 = () => {  //player1 card1 , card2
+        return (
+            <div className="g2p1">
+                <img id ="img2D1" src ="/images/backimage.png"/>
+                <img id ="img2D2" src ="/images/backimage.png"/>
+            </div>
+        )
+    }
+    const playerCard2 = () => { //player2 card1 , card2
+        return (
+            <div className="g2p2">
                 <img id ="img2M1" src ="/images/backimage.png"/>
                 <img id ="img2M2" src ="/images/backimage.png"/>
-                {show&&<Bet data={data} setData={setData}/>}
-
             </div>
-
-
+        )
+    }
+    return (
+        <div>
+            <Free visible={visible} setVisible={setVisible} show={show} setShow={setShow} cardImg={cardImg}
+                  playerCard1={playerCard1} playerCard2={playerCard2} data={data} setData={setData}
+                  reverseCard1={reverseCard1} reverseCard2={reverseCard2} images={images} setImages={setImages}
+                  bet={bet} setBet={setBet} betDiff={betDiff} setDiff={setDiff}/>
         </div>
     );
 };
 
 export default StartTwo;
-export let card = React.createContext();

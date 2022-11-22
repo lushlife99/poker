@@ -13,19 +13,8 @@ const Bet2 = (props) => {
                 props.setTurn(turn+1);
                 props.setFold(fold+1); //1명제외 fold일시 게임종료를 위해
                 // navigate("/wait"); //대기 뷰
-            }}>폴드</button>
-            <button onClick={()=> {
-                console.log('콜!');
-                //navigate("/wait");
-                props.setTurn(turn+1);
-            }}>콜</button>
-            <button onClick={()=> {
-                console.log('레이즈!');//선택할수 있게
-                let money = prompt('금액 입력');
-                console.log(money);
-                props.setTurn(turn+1);
-                //navigate("/wait");
-            }}>레이즈</button>
+            }}>체크</button>
+
 
         </div>
     );

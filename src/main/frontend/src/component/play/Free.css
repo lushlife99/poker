@@ -1,0 +1,26 @@
+.set{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position : relative;
+    padding-top:10px;
+
+}
+.c2 {
+    width:75px;
+    height :100px;
+}
+.card {
+    display:flex;
+    width:75px;
+    height :100px;
+    float: left;
+    text-align: center;
+
+}
+.gamer2_1 {
+    width :75px;
+}
+.gamer2_2 {
+    width: 75px;
+}

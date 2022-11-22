@@ -98,6 +98,7 @@ public class GameService {
         if(card%13 == 0){
             return true;
         }
+
         return false;
     }
 
@@ -106,20 +107,19 @@ public class GameService {
             board.getPlayer().get(i).setJokBo(status[i][0]);
         }
 
-
         long[] a = new long[board.getTotal_player()];
         long b = 100000000;
         for(int i = 0; i < board.getTotal_player(); i++){
-            for(int j = 1; j < 6; j++){
-                if(A검사(status[i][j])){
-                  a[i] +=  14*b;
-                }
-                else {
-                    a[i] += status[i][j]%13 * b;
-                    b /= 100;
-                }
-            }
             b = 100000000;
+            for(int j = 1; j < 6; j++) {
+                if (A검사(status[i][j])) {
+                    a[i] += 14 * b;
+                } else if(status[i][j] != -1){
+
+                    a[i] += status[i][j] % 13 * b;
+                }
+                b /= 100;
+            }
         }  //이러면 배열에 다 저장됨.
         long temp;
         int temp2;
@@ -175,7 +175,38 @@ public class GameService {
         return rank;
     }
 
-    public Board 팟분배(Board board, int[] rank){
+    public String 카드번역기(int card){
+        String s;
+        if(card%13 == 0){
+            s = "A";
+        }else if(card%13 == 10){
+            s = "J";
+        }else if(card%13 == 11){
+            s = "Q";
+        }
+        else if(card%13 == 12){
+            s = "K";
+        }else{
+            s = String.valueOf(card%13+1);
+        }
+
+        if(card/13 == 0){
+            s += "h";
+        }else if(card/13 == 1){
+            s += "d";
+        }else if(card/13 == 2){
+            s += "c";
+        }else{
+            s += "s";
+        }
+        return s;
+    }
+    public int[][] 팟분배(Board board, int[] rank){
+        int result[][] = new int[rank.length][2];
+        for(int i = 0; i < rank.length; i++){
+            result[i][0] = rank[i];
+            result[i][1] = board.getPlayer().get(rank[i]).getStack();
+        }
         int cnt = 0;
         int cost = 0;
         int pot = board.getAmountOfPot();
@@ -183,7 +214,7 @@ public class GameService {
 
         while(pot >0){
             player = board.getPlayer().get(rank[cnt]);
-            if(!player.getIsDraw()) {
+            if(!player.getIsDraw()) { // 안비겼을 때
                 int idx = 0;
                 Player player1;
                 for(int i = 0; i < board.getTotal_player()-1; i++){
@@ -254,9 +285,14 @@ public class GameService {
             cnt++;
             player.setFold(1);  //돈받았으니까 fold 처리
         }
+        for(int i = 0; i < rank.length; i++){
+            int num = board.getPlayer().get(rank[i]).getStack() - result[i][1];
+            result[i][1] = num;
+        }
+
 
         boardRepository.save(board);
-        return board;
+        return result;
     }
 
     public int[][] 족보계산하기(Board board){

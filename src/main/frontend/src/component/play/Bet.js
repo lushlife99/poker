@@ -11,13 +11,6 @@ const Bet = (props) => {
             "Content-Type": "application/json"
         }
     }
-
-
-    /*const click = () => {
-        axios.put('http://localhost:8080/api/board/foldBetting',{        // PUT
-            data: data.data,
-        })
-    }*/
     return (
         <div>
             <button onClick={()=>
@@ -25,8 +18,7 @@ const Bet = (props) => {
                 axios.put('http://localhost:8080/api/board/foldBetting',{        // PUT
                     data: data,
                 })
-
-                console.log(data);
+               // console.log(data.data);
                 navigate("/wait2"); //대기뷰
             }}>폴드</button>
             <button onClick={()=> {
@@ -42,5 +34,4 @@ const Bet = (props) => {
         </div>
     );
 };
-
 export default Bet;

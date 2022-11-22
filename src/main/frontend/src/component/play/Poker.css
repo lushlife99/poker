@@ -1,8 +1,7 @@
 body {
-    background-image:url(tt.jpg);
+    background-image:url(red.png);
     background-size: cover;
     background-repeat: no-repeat;
-
 }
 .table {
     display: flex;

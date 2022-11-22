@@ -73,16 +73,23 @@ public class BoardApiController {
         return new ResponseDto<Board>(upperGameService.게임종료(board.getData()));
     }
 
+    @PutMapping("/api/board/winner/{id}")
+    public ResponseDto<Board> win(@PathVariable int id){
+        Board board = boardRepository.findById(id).get();
+        return new ResponseDto<Board>(upperGameService.게임종료(board));
+    }
+
     @PutMapping("/api/board/determineWinner")
     public ResponseDto<Board> determineWinner(@RequestBody ResponseDto<Board> board){
         return new ResponseDto<Board>(upperGameService.게임끝(board.getData()));
     }
 
     @PutMapping("/api/board/{id}")
-    public DeferredResult<Board> joinGame(@PathVariable int id, HttpSession session){
+    public DeferredResult<Board> joinGame(@PathVariable int id){
+        System.out.println("대기요청");
         DeferredResult<Board> output = new DeferredResult<>();
         try{
-            Thread.sleep(2000); //2초 기다림
+            Thread.sleep(500); //2초 기다림
             Board board = boardRepository.findById(id).get();
             output.setResult(board);
         } catch (Exception e) {
@@ -90,5 +97,6 @@ public class BoardApiController {
         }
         return output;
     }
+
 
 }

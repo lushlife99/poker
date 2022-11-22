@@ -8,7 +8,6 @@ import com.example.poker.service.GameService;
 import com.example.poker.service.PlayerService;
 import com.example.poker.service.UpperGameService;
 import com.example.poker.session.SessionManager;
-import com.mysql.cj.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;

@@ -33,7 +33,7 @@ public class Board {
     private int card5;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
-    @JsonIgnoreProperties("board")
+    @JsonIgnoreProperties(value = "board", allowSetters = true)
     private List<Player> player;
 
     @JsonProperty("total_player")
@@ -67,4 +67,10 @@ public class Board {
     private Timestamp createDate;
 
 
+
+
+
 }
+
+
+

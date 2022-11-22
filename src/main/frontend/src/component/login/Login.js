@@ -7,7 +7,7 @@ const Login = () => {
     const [inputId,setInputId] = useState();
     const [inputPw,setInputPW] = useState();
     const [user,setUser] = useState();
-    const [cookies,setCookie, getCookie] = useCookies(['id']);
+    const [cookies,setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
     const handleInputId = (e) => {
         setInputId(e.target.value);
@@ -17,7 +17,7 @@ const Login = () => {
     }
 
     const clickLogin = () => {
-        if((user&&user.data.username===inputId)&&(user&&user.data.password===inputPw)) {
+        if(!(user&&user.data!==null)) {
             alert('로그인 완료!');
             navigate("/game");
         }
@@ -44,12 +44,15 @@ const Login = () => {
             <button onClick={ async () => {
                 await axios.put('http://localhost:8080/api/player/login',{
                     data:{
-                        "username":inputId,
-                        "password":inputPw
-                    }
-                },{withCredentials: true}).then((res) => {
-                    setUser(res.data);
-                });
+                    "username":inputId,
+                    "password":inputPw
+                        }
+                },{withCredentials : true}).then((res) => {
+                        console.log(res.data.data.id);
+                        setUser(res.data);
+                        setCookie('playerID',res.data.data.id);
+                        removeCookie("id123213");
+                    });
                 clickLogin();
             }}>로그인</button>
         </div>

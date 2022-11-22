@@ -8,22 +8,13 @@ const Join = () => {
     const [password,setPasswd] = useState();
     const [player,setPlayer] = useState();
     const navigate = useNavigate();
-
     const onChangeId = (e) => {
         setId(e.target.value);
     }
     const onChangePasswd = (e) => {
         setPasswd(e.target.value);
     }
-    const existPlayer = () => {
-        if(player&&player.data!==null) {
-            alert('회원가입 완료');
-            navigate('/main');
-        }
 
-        else
-            alert('회원가입 실패');
-    };
     return (
         <div>
             <div className="join">
@@ -48,9 +39,14 @@ const Join = () => {
                 }).then((response) => {
                     console.log('회원가입 정보 전송');
                     setPlayer(response.data);
-                    console.log(response.data);
+                    console.log(response.data.data);
+                    if(response.data.data.board===null) {
+                        alert('회원가입 완료');
+                        navigate("/main");
+                    }
+                    else
+                        alert('이미 등록된 아이디 입니다.');
                 });
-                existPlayer();
             }}>회원가입완료</button>
         </div>
     );

@@ -13,6 +13,5 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Builder
 public class ResponseDto<T> {
-
     T data;
 }
