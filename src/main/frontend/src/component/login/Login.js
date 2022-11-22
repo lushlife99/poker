@@ -7,7 +7,7 @@ const Login = () => {
     const [inputId,setInputId] = useState();
     const [inputPw,setInputPW] = useState();
     const [user,setUser] = useState();
-    const [cookies,setCookie] = useCookies(['id']);
+    const [cookies,setCookie, getCookie] = useCookies(['id']);
     const navigate = useNavigate();
     const handleInputId = (e) => {
         setInputId(e.target.value);
@@ -47,10 +47,8 @@ const Login = () => {
                         "username":inputId,
                         "password":inputPw
                     }
-                },).then((res) => {
-                    console.log('로그인 정보 전송');
+                },{withCredentials: true}).then((res) => {
                     setUser(res.data);
-                    setCookie('id',res.data.token);
                 });
                 clickLogin();
             }}>로그인</button>

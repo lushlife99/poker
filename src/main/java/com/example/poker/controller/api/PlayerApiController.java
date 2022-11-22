@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@CrossOrigin
 public class PlayerApiController {
 
 
