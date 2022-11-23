@@ -5,11 +5,11 @@ import axios from 'axios';
 const Wait = () => {
     const [board,setBoard] = useState();
     setInterval( async () => {
-        await axios.put('http://localhost:8080/game/joinGame/1').then((res) => {
+        await axios.put('http://localhost:8080/game/joinGame/2').then((res) => {
             console.log('board요청');
             setBoard(res.data);
         })
-    },9000);
+    },5000);
     const navigate = useNavigate();
     return (
         <div>

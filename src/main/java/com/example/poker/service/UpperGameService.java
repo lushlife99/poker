@@ -113,6 +113,7 @@ public class UpperGameService {
 
     @Transactional
     public Board 게임종료(Board board){
+        boardService.테이블세팅(board);
         for(int i = 0; i < board.getTotal_player(); i++){
             if(board.getPlayer().get(i).getFold() != 1){
                 board.getPlayer().get(i).setStack(
@@ -122,7 +123,6 @@ public class UpperGameService {
                 break;
             }
         }
-        boardService.테이블세팅(board);
         boardRepository.save(board);
         return board;
     }

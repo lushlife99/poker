@@ -202,7 +202,7 @@ public class GameService {
         return s;
     }
     public int[][] 팟분배(Board board, int[] rank){
-        int result[][] = new int[rank.length][2];
+        int[][] result = new int[rank.length][2];
         for(int i = 0; i < rank.length; i++){
             result[i][0] = rank[i];
             result[i][1] = board.getPlayer().get(rank[i]).getStack();
@@ -214,6 +214,10 @@ public class GameService {
 
         while(pot >0){
             player = board.getPlayer().get(rank[cnt]);
+            if(player.getTotal_cal() == 0){
+                cnt++;
+                continue;
+            }
             if(!player.getIsDraw()) { // 안비겼을 때
                 int idx = 0;
                 Player player1;
@@ -283,6 +287,11 @@ public class GameService {
 
                 pot -= sidePot;
             }
+            int callcost = 0;
+             callcost = board.getPlayer().get(rank[cnt]).getTotal_cal();
+             pot -= callcost;
+             board.getPlayer().get(rank[cnt]).setStack(board.getPlayer().get(rank[cnt]).getStack()+callcost);
+             board.getPlayer().get(rank[cnt]).setTotal_cal(0);
             cnt++;
             player.setFold(1);  //돈받았으니까 fold 처리
         }
