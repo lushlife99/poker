@@ -113,7 +113,6 @@ public class BoardService {
             }
         }
         board.setBetPos(board.getBetPos()+cnt);
-        boardRepository.save(board);
         if(cnt!=board.getTotal_player()){
             return true;
         }

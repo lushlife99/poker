@@ -51,7 +51,6 @@ const Login = () => {
                         console.log(res.data.data.id);
                         setUser(res.data);
                         setCookie('playerID',res.data.data.id);
-                        removeCookie("id123213");
                     });
                 clickLogin();
             }}>로그인</button>

@@ -52,6 +52,7 @@ public class PlayerService {
         board.setTotal_player(board.getTotal_player()+1);
         player.setBoard(board);
         playerRepository.save(player);
+        boardRepository.save(board);
         return board;
     }
 

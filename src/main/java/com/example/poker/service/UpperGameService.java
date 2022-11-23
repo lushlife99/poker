@@ -38,33 +38,42 @@ public class UpperGameService {
         boardService.액션(board);
         if(boardService.액션카운트증가(board)){
             gameService.다음베팅플레이어(board);
+            boardRepository.save(board);
             return board;
         }
         else{
             페이즈종료(board);
+            boardRepository.save(board);
             return board;
         }
+
     }
 
     @Transactional
     public Board 레이즈액션(Board board){ //레이즈 했을 때 실행
         boardService.액션카운트초기화(board);
         boardService.액션(board);
+        boardRepository.save(board);
         return board;
     }
+
 
     @Transactional
     public Board 폴드(Board board){
         boardService.액션(board);
         if(boardService.액션카운트증가(board)){
             gameService.다음베팅플레이어(board);
+            boardRepository.save(board);
             return board;
         }
         else{
             페이즈종료(board);
+            boardRepository.save(board);
             return board;
         }
+
     }
+
 
     @Transactional
     public Board 페이즈종료(Board board){
@@ -94,9 +103,9 @@ public class UpperGameService {
         }
         //팟분배만 하면 됨..
         int result[][] = gameService.팟분배(board, rank);
-//        for(int i = 0; i < result.length; i++){
-//            System.out.println((i+1)+"위 : " +result[i][0]+" 얻은 스택 : "+result[i][1]);
-//        }
+        for(int i = 0; i < result.length; i++){
+            System.out.println((i+1)+"위 : " +result[i][0]+" 얻은 스택 : "+result[i][1]);
+        }
         boardService.테이블세팅(board);
         boardRepository.save(board);
         return board;

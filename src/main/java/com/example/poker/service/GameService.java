@@ -166,7 +166,7 @@ public class GameService {
                             rank[j] = temp2;
                             board.getPlayer().get(j).setDrawWho(i);
                         }
-                        board.getPlayer().get(i).setDrawWho(j);
+                       // board.getPlayer().get(i).setDrawWho(j);
                     }
                 }
             }
@@ -217,13 +217,13 @@ public class GameService {
             if(!player.getIsDraw()) { // 안비겼을 때
                 int idx = 0;
                 Player player1;
-                for(int i = 0; i < board.getTotal_player()-1; i++){
+                for(int i = 0; i < board.getTotal_player(); i++){
                     player1 = board.getPlayer().get(i);
-                    if(player1 == player){
+                    if(player1 == player || player1.getTotal_cal() == 0){
                         continue;
                     }
 
-                    if(player1.getTotal_cal() <= player.getTotal_cal() && player1.getFold() != 1){
+                    if(player1.getTotal_cal() <= player.getTotal_cal()){
                         cost = player1.getTotal_cal();
                         player.setStack(player.getStack()+cost);
                         pot -= cost;
@@ -234,6 +234,7 @@ public class GameService {
                         cost = player.getTotal_cal();
                         player1.setStack(player1.getStack() - cost);
                         player.setStack(player.getStack()+cost);
+                        player1.setTotal_cal(player1.getTotal_cal() - cost);
                         pot -= cost;
                     }
                 }
@@ -241,25 +242,26 @@ public class GameService {
             else { //비긴 사람이 있을 때
                 Player player1;
                 player1 = player;
-                int drawPlayerNum = 0;
+                int drawPlayerNum = 1;
                 int drawWho = player1.getDrawWho();
                 int minCal = 999999999;
                 int minIdx = 0;
-                while (drawWho != 0) {
+                //여기 do 문부터 다시
+               do {
                     drawPlayerNum++;
-                    player1 = board.getPlayer().get(drawWho - 1);
+                    player1 = board.getPlayer().get(drawWho);
                     if (player1.getTotal_cal() < minCal) {
                         minCal = player1.getTotal_cal();
-                        minIdx = drawWho - 1;
+                        minIdx = drawWho;
                     }
                     drawWho = player1.getDrawWho();
-                }
+                } while (board.getPlayer().get(drawWho).getIsDraw());
 
-                int sidePot = 0;
+                    int sidePot = 0;
                 player = board.getPlayer().get(rank[cnt]);
                 for (int i = 0; i < board.getTotal_player(); i++){
                     player1 =board.getPlayer().get(i);
-                    if(player1 == player){
+                    if(player1 == player || player1.getTotal_cal() == 0){
                         continue;
                     }
 
@@ -273,11 +275,10 @@ public class GameService {
                         player1.setCal(player1.getTotal_cal()-player.getTotal_cal());
                     }
                 }
-
                 do{
-                    player = board.getPlayer().get(drawWho-1);
+                    player = board.getPlayer().get(drawWho);
                     player.setStack(player.getStack() + sidePot/drawPlayerNum);
-                    drawWho = board.getPlayer().get(drawWho-1).getDrawWho();
+                    drawWho = board.getPlayer().get(drawWho).getDrawWho();
                 }while(drawWho != 0); //비긴사람들한테 나눠줌.
 
                 pot -= sidePot;

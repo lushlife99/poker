@@ -51,10 +51,10 @@ public class PlayerApiController {
 
     // 회원가입
     @PostMapping("/api/player")
-    public ResponseDto<Player> save(@RequestBody ResponseDto<Player> player, HttpServletRequest request){
+    public ResponseDto<Player> save(@RequestBody ResponseDto<Player> player){
         Player result = playerService.회원가입(player.getData());
         if(result == null){
-            return null;
+            return new ResponseDto<>(null);
         }
         else{
             return new ResponseDto<>(result);
