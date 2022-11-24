@@ -59,6 +59,7 @@ public class BoardApiController {
     @PutMapping("/api/board/raiseBetting")
     @Transactional
     public ResponseDto<Board> raiseBetting(@RequestBody ResponseDto<Board> board){
+        System.out.println("결과 : "+board.getData().getPlayer().get(board.getData().getBetPos()).getStack());
         return new ResponseDto<Board>(upperGameService.레이즈액션(board.getData()));
     }
 

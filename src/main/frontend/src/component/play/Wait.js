@@ -9,7 +9,7 @@ const Wait = () => {
             console.log('board요청');
             setBoard(res.data);
         })
-    },9000);
+    },5000);
     const navigate = useNavigate();
     return (
         <div>

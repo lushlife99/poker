@@ -144,6 +144,9 @@ public class BoardService {
     }
     @Transactional
     public Board 액션(Board board){
+        Player player = board.getPlayer().get(board.getBetPos());
+        player.setBoard(board);
+        playerRepository.save(player);
         boardRepository.save(board);
         return board;
     }

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import SixTable from './SixTable';
 import axios from 'axios';
+import {useTimer} from 'use-timer';
 const StartSix = () => {
     const [images,setImages] = useState([
         {id :0, src: '/images/ace_of_spades.png'},
@@ -63,9 +64,6 @@ const StartSix = () => {
         axios.put('http://localhost:8080/api/board/gameStart/1',
         ).then(response => {
             setData(response.data);
-            console.log(response.data);
-            phase = response.data.data.phaseNum;
-            console.log(phase);
         })
     },[]);
 
@@ -80,16 +78,15 @@ const StartSix = () => {
             </div>
         )
     }
-    const reverseCard1 = () => { //게임 시작 후 프리플랍시 카드 뒤집기
+    const reverseCard1 = () => { //게임 시작 후 프리플랍시 카드 뒤집기 + animation 추가
         setTimeout(function() {
             document.getElementById("img6M1").src =images[data.data.player[0].card1].src;  //data.data.player[0].card1
-            console.log(data);
-        },1500);
-    }//게임 시작 후 프리플랍시 카드 뒤집기
+        },500);
+    }//게임 시작 후 프리플랍시 카드 뒤집기 + animation 추가
     const reverseCard2 = () => {
         setTimeout(function () {
-            document.getElementById("img6M2").src= images[data.data.player[0].card2].src;  //card.data.player[0].card2
-        },1900);
+            document.getElementById("img6M2").src= images[data.data.player[0].card2].src;  //data.data.player[0].card2
+        },500);
     }
     const playerCard1 = () => {  //player1 card1 , card2
         return (
@@ -126,8 +123,8 @@ const StartSix = () => {
     const playerCard5 = () => {  //player5 card1 , card2
         return (
             <div className="g6p5">
-                <img id ="img6M1" src ="/images/backimage.png"/>
-                <img id ="img6M2" src ="/images/backimage.png"/>
+                <img className="flip-vertical-right" id ="img6M1" src ="/images/backimage.png"/>
+                <img className="flip-vertical-left" id ="img6M2" src ="/images/backimage.png"/>
             </div>
         )
     }
@@ -144,53 +141,60 @@ const StartSix = () => {
         setRaise(e.target.value);
     };
     const [rb,setRb] = useState(false);  //레이즈 금액 배팅 버튼
-    const [rb1,setRb1] = useState(false); //레이즈 금액 배팅 버튼
-    const phase3 = () => {
+    const [rbr,setRbr] = useState(false); //레이즈 금액 배팅 버튼
+    const phase3 = () => {  //페이즈3 -> 카드3장 뒤집음
         if(data&&data.data.phaseNum===3) {
+            deleteState();
             document.getElementById("rc2_1").src = images[data.data.card1].src;
             document.getElementById("rc2_2").src = images[data.data.card2].src;
             document.getElementById("rc2_3").src = images[data.data.card3].src;
         }
     };
-    const phase4 = () => {
-        if(data&&data.phaseNum===4)
-            document.getElementById("rc2_4").src = images[data.data.card4].src;
-    };
-    const phase5 = () => {
-        if(data&&data.phaseNum===5)
-            document.getElementById("rc2_5").src = images[data.data.card5].src;
-    };
 
-    let betPos;
-    let phase;
-    let cal;
-    let fold;
-    let bet;
-    const waitRequest = () => {
+    const phase4 = () => {  //페이즈4 -> 카드 1장 뒤집음
+        if(data&&data.data.phaseNum===4) {
+            deleteState();
+            document.getElementById("rc2_4").src = images[data.data.card4].src;
+        }
+
+    };
+    const phase5 = () => { //페이즈5 -> 카드 1장 뒤집음
+        if(data&&data.data.phaseNum===5) {
+            deleteState();
+            document.getElementById("rc2_5").src = images[data.data.card5].src;
+        }
+    };
+    const waitRequest = () => {  //대기하면서 서버에 요청
         axios.put('http://localhost:8080/api/board/1',{data:data.data});
     }
-    const timeOut = () => {
-        setInterval(waitRequest,3000);
+    const timeOut = () => {  //2초마다 대기요청 -> 서버에 무리감
+        setInterval(waitRequest,2000);
     }
+    let cnt = 0; //cnt증가 -> player 나타냄
+    const [fold,setFold] = useState(false);
+    const [check,setCheck] = useState(false);
+    const [rai,setRai] = useState(false);
+    const [call,setCall] = useState(false);
+    const [all,setAll] = useState(false);
     const rangeBet2= () => {
         return (
             <button id="rb2" onClick={() => {
                 document.getElementById("rb1").style.display='none';
                 document.getElementById("rb2").style.display='none';
-                //let call_cost = data.data.bet - data.data.player[data.data.betPos].cal;
-                data.data.player[data.data.betPos].cal += (data.data.bet - data.data.player[data.data.betPos].cal);
-                data.data.player[data.data.betPos].stack -= (data.data.bet - data.data.player[data.data.betPos].cal);
-                data.data.bet=raise;
-                setData(data); //data.data저장
+                setRai(true);
+                cnt++;
+                console.log(cnt);
+                data.data.bet=parseInt(raise);
+                let call_cost = data.data.bet - data.data.player[data.data.betPos].cal;
+                data.data.player[data.data.betPos].cal += call_cost;
+
+                data.data.player[data.data.betPos].stack -= call_cost;
+
                 axios.put('http://localhost:8080/api/board/raiseBetting',{
                     data:data.data //data.data로
                 }).then((response) => {
-                    bet = response.data.data.bet;
-                    betPos = response.data.data.betPos;
-                    phase = response.data.data.phaseNum;
-                    cal = response.data.data.player[response.data.data.betPos].cal;
-                    fold = response.data.data.player[response.data.data.betPos].fold;
                     console.log('레이즈데이터 전송!');
+                    console.log(response.data.data.player);
                     setData(response.data);
                     timeOut();
                 });
@@ -204,6 +208,8 @@ const StartSix = () => {
                     document.getElementById("f1").style.display='none';
                     document.getElementById("c1").style.display='none';
                     document.getElementById("r1").style.display='none';
+                    setFold(true);
+                    cnt++;
                     data.data.player[data.data.betPos].fold = 1;
                     axios.put('http://localhost:8080/api/board/foldBetting',{
                         data:data.data //data.data로
@@ -218,6 +224,8 @@ const StartSix = () => {
                     document.getElementById("f1").style.display='none';
                     document.getElementById("c1").style.display='none';
                     document.getElementById("r1").style.display='none';
+                    setCheck(true);
+                    cnt++;
                     axios.put('http://localhost:8080/api/board/callBetting',{
                         data:data.data //data.data로
                     }).then((response) => {
@@ -233,6 +241,7 @@ const StartSix = () => {
                     document.getElementById("c1").style.display='none';
                     document.getElementById("r1").style.display='none';
                     setRb(true);
+
                 }}>레이즈</button>
                 {rb&&<input id ="rb1" type="range" name="number" min="10000" max="300000" step="1000"
                             onChange={onChangeRaise}/>}
@@ -247,6 +256,8 @@ const StartSix = () => {
                     document.getElementById("f2").style.display='none';
                     document.getElementById("c2").style.display='none';
                     document.getElementById("r2").style.display='none';
+                    setFold(true);
+                    cnt++;
                     data.data.player[data.data.betPos].fold = 1;
                     axios.put('http://localhost:8080/api/board/foldBetting',{
                         data:data.data //data.data로
@@ -262,15 +273,15 @@ const StartSix = () => {
                     document.getElementById("f2").style.display='none';
                     document.getElementById("c2").style.display='none';
                     document.getElementById("r2").style.display='none';
+                    setCall(true);
+                    cnt++;
+                    let call_cost = data.data.bet - data.data.player[data.data.betPos].cal;
+                    data.data.amountOfPot += call_cost;
+                    data.data.player[data.data.betPos].cal = data.data.bet;
                     axios.put('http://localhost:8080/api/board/callBetting',{
                         data:data.data //data.data로
                     }).then((response) => {
                         console.log('체크데이터 전송!');
-                        bet = response.data.data.bet;
-                        betPos = response.data.data.betPos;
-                        phase = response.data.data.phaseNum;
-                        cal = response.data.data.player[response.data.data.betPos].cal;
-                        fold = response.data.data.player[response.data.data.betPos].fold;
                         setData(response.data);
                         console.log(response.data);
                         timeOut();
@@ -280,12 +291,11 @@ const StartSix = () => {
                     document.getElementById("f2").style.display='none';
                     document.getElementById("c2").style.display='none';
                     document.getElementById("r2").style.display='none';
-                    setRb1(true);
-
+                    setRbr(true);
                 }}>레이즈</button>
-                {rb1&&<input id ="rb1" type="range" name="number" min="10000" max="300000" step="1000"
+                {rbr&&<input id ="rb1" type="range" name="number" min="10000" max="300000" step="1000"
                              onChange={onChangeRaise}/>}
-                {rb1&&rangeBet2()}
+                {rbr&&rangeBet2()}
             </div>
         )
     }
@@ -297,6 +307,8 @@ const StartSix = () => {
                     document.getElementById("f3").style.display='none';
                     document.getElementById("c3").style.display='none';
                     document.getElementById("r3").style.display='none';
+                    setFold(true);
+                    cnt++;
                     data.data.player[data.data.betPos].fold = 1;
                     axios.put('http://localhost:8080/api/board/foldBetting',{
                         data:data.data //data.data로
@@ -311,12 +323,13 @@ const StartSix = () => {
                 <button id="all" className ="allIn" onClick={() => {
                     document.getElementById("f3").style.display='none';
                     document.getElementById("all").style.display='none';
+                    setAll(true);
+                    cnt++;
                     data.data.player[data.data.betPos].fold = 2;
                     axios.put('http://localhost:8080/api/board/raiseBetting', {
                         data:data.data
                     }).then((response) => {
                         console.log('올인!');
-                        //response.data.data.player[response.data.data.betPos].fold =2;
                         setData(response.data);
                         timeOut();
                     });
@@ -325,31 +338,37 @@ const StartSix = () => {
             </div>
         )
     }
-
-    const foldInput = () => {
+    const foldInput = () => { //폴드 상태 표시
         return (
-            <input type="text" value="폴드"/>
+            <button id ="foldState">폴드</button>
         )
     }
-    const callInput = () => {
+    const callInput = () => { //콜 상태 표시
         return (
-            <input type="text" value="콜"/>
+            <button id ="callState">콜</button>
         )
     }
-    const allInput = () => {
+    const allInput = () => { //올인 상태 표시
         return (
-            <input type="text" value="올인"/>
+            <button id = "allState">올인</button>
         )
     }
-    const raiseInput = () => {
+    const raiseInput = () => { //레이즈 상태 표시
         return (
-            <input type="text" value="레이즈"/>
+            <button id ="raiseState">레이즈</button>
         )
     }
-    const checkInput = () => {
+    const checkInput = () => { //체크 상태 표시
         return (
-            <input type="text" value="체크"/>
+            <button id = " checkState">체크</button>
         )
+    }
+    const deleteState = () => {  //페이즈 변경시 배팅 상태 제거
+        document.getElementById("foldState").style.display='none';
+        document.getElementById("checkState").style.display='none';
+        document.getElementById("callState").style.display='none';
+        document.getElementById("allState").style.display='none';
+        document.getElementById("raiseState").style.display='none';
     }
 
     return (
@@ -360,11 +379,12 @@ const StartSix = () => {
                       playerCard4={playerCard4} playerCard5={playerCard5} playerCard6={playerCard6}
                       reverseCard1={reverseCard1} reverseCard2={reverseCard2}
                       data={data} setData={setData} betBtn1={betBtn1} betBtn2={betBtn2} betBtn3={betBtn3}
-                      phase3={phase3} phase4={phase4} phase5={phase5}
+                      phase3={phase3} phase4={phase4} phase5={phase5}  foldInput={foldInput}
+                      checkInput={checkInput} callInput={callInput} allInput={allInput} raiseInput={raiseInput} cnt={cnt}
+                      fold={fold} check={check} rai={rai} call={call} all={all}
 
             />
         </div>
     );
 };
-
 export default StartSix;

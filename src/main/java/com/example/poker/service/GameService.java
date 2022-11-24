@@ -111,7 +111,7 @@ public class GameService {
         long b = 100000000;
         for(int i = 0; i < board.getTotal_player(); i++){
             b = 100000000;
-            for(int j = 1; j < 6; j++) {
+            for(int j = 0; j < 5; j++) {
                 if (A검사(status[i][j])) {
                     a[i] += 14 * b;
                 } else if(status[i][j] != -1){
@@ -212,7 +212,7 @@ public class GameService {
         int pot = board.getAmountOfPot();
         Player player;
 
-        while(pot >0){
+        while(pot > 5){
             player = board.getPlayer().get(rank[cnt]);
             if(!player.getIsDraw()) { // 안비겼을 때
                 int idx = 0;
@@ -232,9 +232,8 @@ public class GameService {
                     }
                     else { // player1이 더 크게 베팅했을 때
                         cost = player.getTotal_cal();
-                        player1.setStack(player1.getStack() - cost);
-                        player.setStack(player.getStack()+cost);
                         player1.setTotal_cal(player1.getTotal_cal() - cost);
+                        player.setStack(player.getStack()+cost);
                         pot -= cost;
                     }
                 }
@@ -272,19 +271,23 @@ public class GameService {
                     }
                     else { // player1이 더 크게 베팅했을 때
                         sidePot+= player.getTotal_cal();
-                        player1.setCal(player1.getTotal_cal()-player.getTotal_cal());
+                        player1.setTotal_cal(player1.getTotal_cal()-player.getTotal_cal());
                     }
                 }
                 do{
-                    player = board.getPlayer().get(drawWho);
-                    player.setStack(player.getStack() + sidePot/drawPlayerNum);
+                    player1 = board.getPlayer().get(drawWho);
+                    player1.setStack(player1.getStack() + sidePot/drawPlayerNum);
                     drawWho = board.getPlayer().get(drawWho).getDrawWho();
                 }while(drawWho != 0); //비긴사람들한테 나눠줌.
 
                 pot -= sidePot;
             }
+            player.setStack(player.getStack()+player.getTotal_cal());
+            pot -= player.getTotal_cal();
+            System.out.println("플레이어"+rank[cnt]+" : "+"얻은 스택 : "+(board.getPlayer().get(rank[cnt]).getStack() - result[rank[cnt]][1]));
             cnt++;
             player.setFold(1);  //돈받았으니까 fold 처리
+            player.setTotal_cal(0);
         }
         for(int i = 0; i < rank.length; i++){
             int num = board.getPlayer().get(rank[i]).getStack() - result[i][1];
@@ -421,20 +424,27 @@ public class GameService {
             int straight_array[] = new int [5];
             for(int k = 6; k > 0; k--) {
                 if(cnt == 1) {
-                    max = card[k];
+                    max = card[k]%13;
                     straight_array[cnt-1] = card[k];
                 }
 
-                if(card[k]%13 == max) {
+                if(card[k]%13 == (card[k-1])%13){
                     continue;
                 }
 
-
-                if(card[k]%13 == (card[k-1]%13)+1) {
+                if(card[k]%13 == (card[k-1]+1)%13) {
 
                     straight_array[(cnt++)-1] = card[k];
+                    if(cnt == 5){
+                        break;
+                    }
+
                 }
-                else {
+                else if(cnt == 4 && card[k]%13 == 12 && (card[k-1]+1)%13 == 0){
+                    break;
+                }
+
+                else if(k > 4) {
                     cnt = 1;
                 }
 
@@ -554,7 +564,7 @@ public class GameService {
 
             //2.로얄 플러시, 로얄 스트레이트 플러시. max에는 스트레이트의 top이 저장되어있음.
             cnt = 1;
-            if(straight) {
+            if(straight && back_straight) {
                 if(flush) {
                     for(int q = 0 ; q <4; q++) {
                         if(straight_array[q]%13 == straight_array[q+1] % 13 + 1) {
@@ -635,7 +645,19 @@ public class GameService {
             else if(straight) {
 
                 rank[i][0] = 5;
-                rank[i][1] = top1;
+                rank[i][1] = straight_array[0];
+                rank[i][2] = straight_array[1];
+                rank[i][3] = straight_array[2];
+                rank[i][4] = straight_array[3];
+                rank[i][5] = straight_array[4];
+            }
+            else if(back_straight){
+                rank[i][0] = 5;
+                rank[i][1] = straight_array[0];
+                rank[i][2] = straight_array[1];
+                rank[i][3] = straight_array[2];
+                rank[i][4] = straight_array[3];
+                rank[i][5] = straight_array[4];
             }
             else if(triple) {
 

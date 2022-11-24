@@ -2,6 +2,7 @@ package com.example.poker.service;
 
 
 import com.example.poker.model.Board;
+import com.example.poker.model.Player;
 import com.example.poker.repository.PlayerRepository;
 import com.example.poker.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +52,8 @@ public class UpperGameService {
 
     @Transactional
     public Board 레이즈액션(Board board){ //레이즈 했을 때 실행
-        boardService.액션카운트초기화(board);
         boardService.액션(board);
+        boardService.액션카운트초기화(board);
         boardRepository.save(board);
         return board;
     }
@@ -94,9 +95,10 @@ public class UpperGameService {
         System.out.print(gameService.카드번역기(board.getCard4())+" ");
         System.out.println(gameService.카드번역기(board.getCard5())+" ");
         for(int i = 0; i < board.getTotal_player(); i++){
-            System.out.println("플레이어"+(i+1)+" 카드 : "+gameService.카드번역기(board.getPlayer().get(i).getCard1())+" "+gameService.카드번역기(board.getPlayer().get(i).getCard2()));
-
+            System.out.println("플레이어"+(i+1)+" 카드 : "+gameService.카드번역기(board.getPlayer().get(i).getCard1())+" "+gameService.카드번역기(board.getPlayer().get(i).getCard2())
+            +"족보 : "+jokBo[i][0]);
         }
+
         int rank[] = gameService.승자고르기(board, jokBo);
         for(int i = 0; i < rank.length; i++){
             System.out.println((i+1)+"위 : " +rank[i]);
@@ -106,6 +108,12 @@ public class UpperGameService {
         for(int i = 0; i < result.length; i++){
             System.out.println((i+1)+"위 : " +result[i][0]+" 얻은 스택 : "+result[i][1]);
         }
+        Player player;
+//        for(int i = 0; i < board.getTotal_player(); i++){
+//            player = board.getPlayer().get(i);
+//            player.setBoard(board);
+//            playerRepository.save(player);
+//        }
         boardService.테이블세팅(board);
         boardRepository.save(board);
         return board;
