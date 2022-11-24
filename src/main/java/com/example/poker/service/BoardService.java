@@ -37,6 +37,10 @@ public class BoardService {
 
     @Transactional
     public void 테이블세팅(Board board){
+        board.setTotal_player(board.getPlayer().size());
+        if(board.getTotal_player() == 0){
+            return;
+        }
         board.setBb(board.getBb()+1%board.getTotal_player());
         board.setSb(board.getSb()+1%board.getTotal_player());
         board.setBet(0);
