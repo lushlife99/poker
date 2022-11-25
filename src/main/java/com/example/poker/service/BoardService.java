@@ -116,7 +116,7 @@ public class BoardService {
                 break;
             }
         }
-        board.setBetPos(board.getBetPos()+cnt);
+        board.setBetPos((board.getBetPos()+cnt)%board.getTotal_player());
         if(cnt!=board.getTotal_player()){
             return true;
         }

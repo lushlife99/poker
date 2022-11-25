@@ -130,23 +130,20 @@ public class GameService {
         }
         for(int i = 0; i < board.getTotal_player()-1; i++){
             for(int j = i+1; j < board.getTotal_player(); j++){
-                if(a[i]<a[j]){
-                    temp  = a[i];
-                    a[i] = a[j];
-                    a[j] = temp;
+                if(a[rank[i]]<a[rank[j]]){
                     temp2 = rank[i];
                     rank[i] = rank[j];
                     rank[j] = temp2;
                 }
-                else if(a[i] == a[j]){
+                else if(a[rank[i]] == a[rank[j]]){
 
 
-                    if(A검사(status[i][5]%13))
+                    if(A검사(status[rank[i]][5]))
                         status[i][5] = 13;
-                    if(A검사(status[j][5]%13))
+                    if(A검사(status[rank[j]][5]))
                         status[j][5] = 13;
 
-                    if(status[i][5]%14 < status[j][5]%14){
+                    if(status[rank[i]][5]%14 < status[rank[j]][5]%14){
                         temp  = a[i];
                         a[i] = a[j];
                         a[j] = temp;
@@ -154,19 +151,14 @@ public class GameService {
                         rank[i] = rank[j];
                         rank[j] = temp2;
                     }
-                    else if(status[i][5]%14 == status[j][5]%14){ //같으면 스택작은순
-                        board.getPlayer().get(i).setIsDraw(true);
-                        board.getPlayer().get(j).setIsDraw(true);
-                        if(board.getPlayer().get(i).getStack() > board.getPlayer().get(j).getStack()){
-                            temp  = a[i];
-                            a[i] = a[j];
-                            a[j] = temp;
+                    else if(status[rank[i]][5]%14 == status[rank[j]][5]%14){ //같으면 팟기여 낮은 순.
+                        if(board.getPlayer().get(rank[i]).getTotal_cal() > board.getPlayer().get(rank[j]).getTotal_cal()){
                             temp2 = rank[i];
                             rank[i] = rank[j];
                             rank[j] = temp2;
-                            board.getPlayer().get(j).setDrawWho(i);
+                            board.getPlayer().get(rank[i]).setDrawWho(rank[j]);
+                            board.getPlayer().get(rank[i]).setIsDraw(true);
                         }
-                       // board.getPlayer().get(i).setDrawWho(j);
                     }
                 }
             }
@@ -223,7 +215,7 @@ public class GameService {
                 Player player1;
                 for(int i = 0; i < board.getTotal_player(); i++){
                     player1 = board.getPlayer().get(i);
-                    if(player1 == player || player1.getTotal_cal() == 0){
+                    if(player1 == player || player1.getTotal_cal() == 0 || player1.getFold() == 1){
                         continue;
                     }
 
@@ -241,65 +233,66 @@ public class GameService {
                         pot -= cost;
                     }
                 }
+                player.setStack(player.getStack()+player.getTotal_cal());
+                pot -= player.getTotal_cal();
+                player.setFold(1);  //돈받았으니까 fold 처리
+                player.setTotal_cal(0);
             }
             else { //비긴 사람이 있을 때
-                Player player1;
-                player1 = player;
+                Player player1 = player;
                 int drawPlayerNum = 1;
                 int drawWho = player1.getDrawWho();
-                int minCal = 999999999;
+                int minCal = player.getTotal_cal();
                 int minIdx = 0;
                 //여기 do 문부터 다시
                do {
                     drawPlayerNum++;
                     player1 = board.getPlayer().get(drawWho);
+                    if(player1.getTotal_cal() == 0){
+                        break;
+                    }
                     if (player1.getTotal_cal() < minCal) {
                         minCal = player1.getTotal_cal();
                         minIdx = drawWho;
                     }
                     drawWho = player1.getDrawWho();
-                } while (board.getPlayer().get(drawWho).getIsDraw());
+                } while (player1.getIsDraw());
+
+               if(drawPlayerNum == 1){
+                   player.setIsDraw(false);
+               }
+
 
                     int sidePot = 0;
                 player = board.getPlayer().get(rank[cnt]);
                 for (int i = 0; i < board.getTotal_player(); i++){
                     player1 =board.getPlayer().get(i);
-                    if(player1 == player || player1.getTotal_cal() == 0){
+                    if(player1.getTotal_cal() == 0){
                         continue;
                     }
 
                     if(player1.getTotal_cal()<=player.getTotal_cal()){
                         sidePot+= player1.getTotal_cal();
                         player1.setTotal_cal(0);
-                        player1.setFold(1); // 돈이 이제 없으니까 폴드처리해줌
                     }
                     else { // player1이 더 크게 베팅했을 때
-                        sidePot+= player.getTotal_cal();
-                        player1.setTotal_cal(player1.getTotal_cal()-player.getTotal_cal());
+
+                        sidePot+= minCal;
+                        player1.setTotal_cal(player1.getTotal_cal()-minCal);
                     }
                 }
+                drawWho = rank[cnt];
                 do{
                     player1 = board.getPlayer().get(drawWho);
                     player1.setStack(player1.getStack() + sidePot/drawPlayerNum);
                     drawWho = board.getPlayer().get(drawWho).getDrawWho();
-                }while(drawWho != 0); //비긴사람들한테 나눠줌.
+                }while(player1.getIsDraw()); //비긴사람들한테 나눠줌.
 
                 pot -= sidePot;
             }
-<<<<<<< HEAD
-            player.setStack(player.getStack()+player.getTotal_cal());
-            pot -= player.getTotal_cal();
-            System.out.println("플레이어"+rank[cnt]+" : "+"얻은 스택 : "+(board.getPlayer().get(rank[cnt]).getStack() - result[rank[cnt]][1]));
-=======
-            int callcost = 0;
-             callcost = board.getPlayer().get(rank[cnt]).getTotal_cal();
-             pot -= callcost;
-             board.getPlayer().get(rank[cnt]).setStack(board.getPlayer().get(rank[cnt]).getStack()+callcost);
-             board.getPlayer().get(rank[cnt]).setTotal_cal(0);
->>>>>>> 6d243a2a087897dba90a209b84cfc933c30decf1
+
+            System.out.println("플레이어"+(rank[cnt]+1)+" : "+"얻은 스택 : "+(board.getPlayer().get(rank[cnt]).getStack() - result[rank[cnt]][1]));
             cnt++;
-            player.setFold(1);  //돈받았으니까 fold 처리
-            player.setTotal_cal(0);
         }
         for(int i = 0; i < rank.length; i++){
             int num = board.getPlayer().get(rank[i]).getStack() - result[i][1];
