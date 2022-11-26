@@ -93,6 +93,14 @@ public class BoardService {
         }
         board.setBetPos(betPos);
         board.setBetAsk(betAsk);
+        Player player;
+        for(int i = 0; i < board.getTotal_player(); i++){
+            player = board.getPlayer().get(i);
+            player.setTotal_cal(player.getTotal_cal()+player.getCal());
+            player.setCal(0);
+            player.setBoard(board);
+            playerRepository.save(player);
+        }
         boardRepository.save(board);
         return board;
     }
@@ -104,7 +112,7 @@ public class BoardService {
             if(board.getPlayer().get(i).getFold() == 1){
                 cnt++;
             }
-            else if(board.getPlayer().get(i).getFold() == 2){
+            else if(board.getPlayer().get(i).getFold() == 2 && i != board.getBetPos()){
                 cnt++;
             }
         }
@@ -117,10 +125,12 @@ public class BoardService {
             }
         }
         board.setBetPos((board.getBetPos()+cnt)%board.getTotal_player());
+        boardRepository.save(board);
         if(cnt!=board.getTotal_player()){
             return true;
         }
         return false;
+
     }
     @Transactional
     public boolean 액션카운트증가(Board board){
@@ -148,9 +158,17 @@ public class BoardService {
     }
     @Transactional
     public Board 액션(Board board){
-        Player player = board.getPlayer().get(board.getBetPos());
-        player.setBoard(board);
-        playerRepository.save(player);
+        Player player;
+        for(int i = 0; i < board.getTotal_player(); i++){
+            player = board.getPlayer().get(i);
+            player.setBoard(board);
+            playerRepository.save(player);
+        }
+
+
+       // Player player = board.getPlayer().get(board.getBetPos());
+       // player.setBoard(board);
+        //playerRepository.save(player);
         boardRepository.save(board);
         return board;
     }

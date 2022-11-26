@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useMemo} from 'react';
 import SixTable from './SixTable';
 import axios from 'axios';
 import {useTimer} from 'use-timer';
+import {useCookies} from 'react-cookie';
 const StartSix = () => {
+    const [cookies, get] = useCookies();
     const [images,setImages] = useState([
         {id :0, src: '/images/ace_of_spades.png'},
         {id :1, src: '/images/2_of_spades.png'},
@@ -63,10 +65,12 @@ const StartSix = () => {
     const [flip3,setFlip3] = useState(false);
     const [flip4,setFlip4] = useState(false);
     const [flip5,setFlip5] = useState(false);
+    const [index,setIndex] = useState();
     useEffect(() => {
         axios.put('http://localhost:8080/api/board/gameStart/1',
         ).then(response => {
             setData(response.data);
+            user(response.data);
         })
     },[]);
     const deleteTimer = () => {
@@ -78,11 +82,71 @@ const StartSix = () => {
         timerType: 'DECREMENTAL',  //감소하는 timer
         onTimeOver : () => {  //시간 over되면 발동되는 함수
             //deleteTimer();
-            alert('시간 초과');
-            reset();  //시간 초과시 다시 countDown하게
-            //data.data.betPos++;
+            //alert('시간 초과');
+            //reset();  //시간 초과시 다시 countDown하게
+            //fold =1 로 설정
         }
     });
+    const bet1 = () => {
+        if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[index].id)&&data.data.bet==0)
+            return betBtn1();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[index].id)&&data.data.bet!=0&&
+            (data.data.player[data.data.betPos].stack > data.data.bet-data.data.player[data.data.betPos].cal))
+            return betBtn2();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[index].id)&&
+            (data.data.bet-data.data.player[data.data.betPos].cal>=data.data.player[data.data.betPos].stack))
+            return betBtn3();
+    }
+    const bet2 = () => {
+        if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[1].id)&&data.data.bet==0)
+            return betBtn1();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[1].id)&&data.data.bet!=0&&
+            (data.data.player[data.data.betPos].stack > data.data.bet-data.data.player[data.data.betPos].cal))
+            return betBtn2();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[1].id)&&
+            (data.data.bet-data.data.player[data.data.betPos].cal>=data.data.player[data.data.betPos].stack))
+            return betBtn3();
+    }
+    const bet3 = () => {
+        if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[2].id)&&data.data.bet==0)
+            return betBtn1();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[2].id)&&data.data.bet!=0&&
+            (data.data.player[data.data.betPos].stack > data.data.bet-data.data.player[data.data.betPos].cal))
+            return betBtn2();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[2].id)&&
+            (data.data.bet-data.data.player[data.data.betPos].cal>=data.data.player[data.data.betPos].stack))
+            return betBtn3();
+    }
+    const bet4 = () => {
+        if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[3].id)&&data.data.bet==0)
+            return betBtn1();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[3].id)&&data.data.bet!=0&&
+            (data.data.player[data.data.betPos].stack > data.data.bet-data.data.player[data.data.betPos].cal))
+            return betBtn2();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[3].id)&&
+            (data.data.bet-data.data.player[data.data.betPos].cal>=data.data.player[data.data.betPos].stack))
+            return betBtn3();
+    }
+    const bet5 = () => {
+        if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[4].id)&&data.data.bet==0)
+            return betBtn1();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[4].id)&&data.data.bet!=0&&
+            (data.data.player[data.data.betPos].stack > data.data.bet-data.data.player[data.data.betPos].cal))
+            return betBtn2();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[4].id)&&
+            (data.data.bet-data.data.player[data.data.betPos].cal>=data.data.player[data.data.betPos].stack))
+            return betBtn3();
+    }
+    const bet6 = () => {
+        if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[5].id)&&data.data.bet==0)
+            return betBtn1();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[5].id)&&data.data.bet!=0&&
+            (data.data.player[data.data.betPos].stack > data.data.bet-data.data.player[data.data.betPos].cal))
+            return betBtn2();
+        else if(show&&data&&(data.data.player[data.data.betPos].id==data.data.player[5].id)&&
+            (data.data.bet-data.data.player[data.data.betPos].cal>=data.data.player[data.data.betPos].stack))
+            return betBtn3();
+    }
 
     const timer1 = () => {
         return (
@@ -96,7 +160,7 @@ const StartSix = () => {
                 <img id="rc2_2" className={flip3 ? 'flip-vertical-right':'c2'} src ="/images/backimage.png"/>
                 <img id="rc2_3" className={flip3 ? 'flip-vertical-right':'c2'} src ="/images/backimage.png"/>
                 <img id="rc2_4" className={flip4 ? 'flip-vertical-right':'c2'} src ="/images/backimage.png"/>
-                <img id="rc2_5" className={flip5 ? 'flip-vertical-right':'c2'} src ="/images/backimage.png"/>
+                <img id="rc2_5" className="blink-2" src ="/images/backimage.png"/>
             </div>
         )
     }
@@ -152,12 +216,45 @@ const StartSix = () => {
     }
     const playerCard6 = () => {  //player6 card1 , card2
         return (
-            <div className="g6p6">
+            <div id= "betPos0" className="g6p6">
                 <img id ="img6D1" src ="/images/backimage.png"/>
                 <img id ="img6D2" src ="/images/backimage.png"/>
             </div>
         )
     }
+
+    const user = (data) => {
+
+        for(let i =0; i<data.data.total_player; i++) {
+            if(data.data.player[i].id === parseInt(document.cookie.at(9))) {
+                setIndex(i);
+                break;
+            }
+        }
+    }
+
+    const playerBett = () => {
+        console.log("3");
+        if(data&&(data.data.phaseNum<6)) {
+            if((data.data.betPos === index)) {
+                if (show && data && (data.data.player[data.data.betPos].id == data.data.player[index].id) && data.data.bet == 0)
+                    return betBtn1();
+                else if (show && data && (data.data.player[data.data.betPos].id == data.data.player[index].id) && data.data.bet != 0 &&
+                    (data.data.player[data.data.betPos].stack > data.data.bet - data.data.player[data.data.betPos].cal))
+                    return betBtn2();
+                else if (show && data && (data.data.player[data.data.betPos].id == data.data.player[index].id) &&
+                    (data.data.bet - data.data.player[data.data.betPos].cal >= data.data.player[data.data.betPos].stack))
+                    return betBtn3();
+            }
+            else{
+                timeOut();
+            }
+
+        }
+
+
+    }
+
     const [raise,setRaise] = useState();
     const onChangeRaise = (e) => { //레이즈 금액 움직이는거 표시
         setRaise(e.target.value);
@@ -167,7 +264,7 @@ const StartSix = () => {
     const phase3 = () => {  //페이즈3 -> 카드3장 뒤집음
         if(data&&data.data.phaseNum===3) {
             setFlip3(true);
-            deleteState();
+            //deleteState();
             document.getElementById("rc2_1").src = images[data.data.card1].src;
             document.getElementById("rc2_2").src = images[data.data.card2].src;
             document.getElementById("rc2_3").src = images[data.data.card3].src;
@@ -177,20 +274,46 @@ const StartSix = () => {
     const phase4 = () => {  //페이즈4 -> 카드 1장 뒤집음
         if(data&&data.data.phaseNum===4) {
             setFlip4(true);
-            deleteState();
+            //deleteState();
             document.getElementById("rc2_4").src = images[data.data.card4].src;
         }
 
     };
+
     const phase5 = () => { //페이즈5 -> 카드 1장 뒤집음
         if(data&&data.data.phaseNum===5) {
             setFlip5(true);
-            deleteState();
+            //deleteState();
             document.getElementById("rc2_5").src = images[data.data.card5].src;
         }
     };
+    /*const result = () => {
+        for(int i=0;i<data.data.arr.length;i++) {
+            for(int j=0;j<data.data.arr[i].length;j++)
+
+        }
+    }*/
+
+    const phase6 = () => {
+        if(data&&data.data.phaseNum===6) {
+            axios.put('http://localhost:8080/api/board/determineWinner',{
+                data:data.data //data.data로
+            }).then((response) => {
+                setData(response.data);
+                for(let i =0; i<data.data.arr.length; i++) {
+                    alert((i+1)+"등 player "+data.data.arr[i][0]+" 스택 : "+data.data.arr[i][1]+"족보 값 : "+data.data.arr[i][2]);
+                }
+            });
+        }
+
+
+
+    }
     const waitRequest = () => {  //대기하면서 서버에 요청
-        axios.put('http://localhost:8080/api/board/1',{data:data.data});
+        axios.put('http://localhost:8080/api/board/1').then((res) => {
+            setData(res);
+            console.log(data);
+        });
     }
     const timeOut = () => {  //2초마다 대기요청 -> 서버에 무리감
         setInterval(waitRequest,2000);
@@ -200,6 +323,11 @@ const StartSix = () => {
     const [rai,setRai] = useState(false);
     const [call,setCall] = useState(false);
     const [all,setAll] = useState(false);
+    const [a,setA] = useState(true);
+    const request = () => {
+
+    }
+
     const rangeBet2= () => {
         return (
             <button id="rb2" onClick={() => {
@@ -207,23 +335,49 @@ const StartSix = () => {
                 document.getElementById("rb2").style.display='none';
                 setRai(true);
                 deleteTimer();
+                setA(false);
                 data.data.bet=parseInt(raise);
+                data.data.player[data.data.betPos].jokBo = 3;
                 let call_cost = data.data.bet - data.data.player[data.data.betPos].cal;
-                data.data.player[data.data.betPos].cal += call_cost;
+                if(data&&(parseInt(raise)===data.data.player[data.data.betPos].stack)) {
+                    data.data.player[data.data.betPos].fold=2;
+                    axios.put('http://localhost:8080/api/board/raiseBetting',{
+                        data:data.data
+                    }).then((response) => {
+                        setData(response.data);
+                    })
+                }
+                else {
+                    data.data.player[data.data.betPos].cal += call_cost;
+                    data.data.player[data.data.betPos].stack -= call_cost;
+                    axios.put('http://localhost:8080/api/board/raiseBetting',{
+                        data:data.data //data.data로
+                    }).then((response) => {
+                        console.log('레이즈데이터 전송!');
+                        console.log(response.data.data);
+                        setData(response.data);
+                        // timeOut();
+                    });
+                }
 
-                data.data.player[data.data.betPos].stack -= call_cost;
-
-                axios.put('http://localhost:8080/api/board/raiseBetting',{
-                    data:data.data //data.data로
-                }).then((response) => {
-                    console.log('레이즈데이터 전송!');
-                    console.log(response.data.data.player);
-                    setData(response.data);
-                    timeOut();
-                });
             }}>{raise}</button>
         )
     }
+    const foldCard = () =>{
+        if(data.data.betPos==0)
+            document.getElementById("betPos0").style.display='none';
+        else if(data.data.betPos==1)
+            document.getElementById("betPos1").style.display='none';
+        else if(data.data.betPos==2)
+            document.getElementById("betPos2").style.display='none';
+        else if(data.data.betPos==3)
+            document.getElementById("betPos3").style.display='none';
+        else if(data.data.betPos==4)
+            document.getElementById("betPos4").style.display='none';
+        else
+            document.getElementById("betPos5").style.display='none';
+    }
+
     const betBtn1 = () => {
         return (
             <div className="bet1">
@@ -233,6 +387,7 @@ const StartSix = () => {
                     document.getElementById("r1").style.display='none';
                     setFold(true);
                     deleteTimer();
+                    //foldCard();
                     data.data.player[data.data.betPos].fold = 1;
                     axios.put('http://localhost:8080/api/board/foldBetting',{
                         data:data.data //data.data로
@@ -240,7 +395,7 @@ const StartSix = () => {
                         console.log('폴드데이터 전송!');
                         setData(response.data);
                         console.log(response.data);
-                        timeOut();
+                        //  timeOut();
                     });
                 }}>폴드</button>
                 <button id = "c1" className="check" onClick={() => {
@@ -249,13 +404,14 @@ const StartSix = () => {
                     document.getElementById("r1").style.display='none';
                     setCheck(true);
                     deleteTimer();
+                    data.data.player[data.data.betPos].jokBo = 4;
                     axios.put('http://localhost:8080/api/board/callBetting',{
                         data:data.data //data.data로
                     }).then((response) => {
                         console.log('체크데이터 전송!');
                         console.log(response.data);
                         setData(response.data);
-                        timeOut();
+                        //  timeOut();
                     });
                     console.log(data);
                 }}>체크</button>
@@ -265,9 +421,10 @@ const StartSix = () => {
                     document.getElementById("r1").style.display='none';
                     setRb(true);
                 }}>레이즈</button>
-                {rb&&data&&((data.data.betPos+1)==data.data.player[data.data.betPos].id)&&<input id ="rb1" type="range" name="number" min="10000" max="300000" step="1000"
-                                                                                                 onChange={onChangeRaise}/>}
-                {rb&&data&&((data.data.betPos+1)==data.data.player[data.data.betPos].id)&&rangeBet2()}
+                {rb&& <input id ="rb1" type="range" name="number"
+                             min={data.data.bet} max={data.data.player[data.data.betPos].stack} step="1000"
+                             onChange={onChangeRaise}/>}
+                {rb&&rangeBet2()}
             </div>
         )
     }
@@ -279,6 +436,7 @@ const StartSix = () => {
                     document.getElementById("c2").style.display='none';
                     document.getElementById("r2").style.display='none';
                     setFold(true);
+                    //foldCard();
                     data.data.player[data.data.betPos].fold = 1;
                     axios.put('http://localhost:8080/api/board/foldBetting',{
                         data:data.data //data.data로
@@ -286,7 +444,7 @@ const StartSix = () => {
                         console.log('폴드데이터 전송!');
                         console.log(response.data);
                         setData(response.data);
-                        timeOut();
+                        //  timeOut();
                     });
                 }}>폴드</button>
                 <button id = "c2" className="check" onClick={() => {
@@ -294,7 +452,9 @@ const StartSix = () => {
                     document.getElementById("c2").style.display='none';
                     document.getElementById("r2").style.display='none';
                     setCall(true);
+                    data.data.player[data.data.betPos].jokBo = 2;
                     let call_cost = data.data.bet - data.data.player[data.data.betPos].cal;
+                    data.data.player[data.data.betPos].stack -= call_cost;
                     data.data.amountOfPot += call_cost;
                     data.data.player[data.data.betPos].cal = data.data.bet;
                     axios.put('http://localhost:8080/api/board/callBetting',{
@@ -303,7 +463,7 @@ const StartSix = () => {
                         console.log('콜 전송!');
                         setData(response.data);
                         console.log(response.data);
-                        timeOut();
+                        // timeOut();
                     });
                 }}>콜</button>
                 <button id = "r2" className="raise" onClick={() => {
@@ -312,9 +472,9 @@ const StartSix = () => {
                     document.getElementById("r2").style.display='none';
                     setRbr(true);
                 }}>레이즈</button>
-                {rbr&&data&&(data.data.betPos===data.data.player[data.data.betPos].id)&&<input id ="rb1" type="range" name="number" min="10000" max="300000" step="1000"
-                                                                                               onChange={onChangeRaise}/>}
-                {rbr&&data&&(data.data.betPos===data.data.player[data.data.betPos].id)&&rangeBet2()}
+                {rbr&&<input id ="rb1" type="range" name="number" min="10000" max="300000" step="1000"
+                             onChange={onChangeRaise}/>}
+                {rbr&&rangeBet2()}
             </div>
         )
     }
@@ -322,11 +482,10 @@ const StartSix = () => {
         return (
             <div className="bet3">
                 <button id="f3" className="fold" onClick={()=> {
-                    alert('폴드');
                     document.getElementById("f3").style.display='none';
-                    document.getElementById("c3").style.display='none';
-                    document.getElementById("r3").style.display='none';
+                    document.getElementById("all").style.diplay='none';
                     setFold(true);
+                    foldCard();
                     data.data.player[data.data.betPos].fold = 1;
                     axios.put('http://localhost:8080/api/board/foldBetting',{
                         data:data.data //data.data로
@@ -335,7 +494,7 @@ const StartSix = () => {
                         // response.data.data.player[response.data.data.betPos].fold = 1;
                         setData(response.data);
                         console.log(response.data);
-                        timeOut();
+                        //   timeOut();
                     });
                 }}>폴드</button>
                 <button id="all" className ="allIn" onClick={() => {
@@ -343,12 +502,14 @@ const StartSix = () => {
                     document.getElementById("all").style.display='none';
                     setAll(true);
                     data.data.player[data.data.betPos].fold = 2;
-                    axios.put('http://localhost:8080/api/board/raiseBetting', {
+                    data.data.player[data.data.betPos].cal += data.data.player[data.data.betPos].stack;
+                    data.data.player[data.data.betPos].stack = 0;
+                    axios.put('http://localhost:8080/api/board/callBetting', {
                         data:data.data
                     }).then((response) => {
                         console.log('올인!');
                         setData(response.data);
-                        timeOut();
+                        //  timeOut();
                     });
                 }}>
                     올인</button>
@@ -365,14 +526,65 @@ const StartSix = () => {
             <button className="task-tooltip" id ="callState">콜</button>
         )
     }
-    const allInput = () => { //올인 상태 표시
+    const allInput1 = () => { //올인 상태 표시
         return (
-            <button className="task-tooltip" id = "allState">올인</button>
+            <button className="task-tooltip" id = "allState">{data.data.player[0].cal}</button>
         )
     }
-    const raiseInput = () => { //레이즈 상태 표시
+    const allInput2 = () => { //올인 상태 표시
         return (
-            <button className="task-tooltip" id ="raiseState">{raise}</button>
+            <button className="task-tooltip" id = "allState">{data.data.player[1].cal}</button>
+        )
+    }
+    const allInput3 = () => { //올인 상태 표시
+        return (
+            <button className="task-tooltip" id = "allState">{data.data.player[2].cal}</button>
+        )
+    }
+    const allInput4 = () => { //올인 상태 표시
+        return (
+            <button className="task-tooltip" id = "allState">{data.data.player[3].cal}</button>
+        )
+    }
+    const allInput5 = () => { //올인 상태 표시
+        return (
+            <button className="task-tooltip" id = "allState">{data.data.player[4].cal}</button>
+        )
+    }
+    const allInput6 = () => { //올인 상태 표시
+        return (
+            <button className="task-tooltip" id = "allState">{data.data.player[5].cal}</button>
+        )
+    }
+    const raiseInput1 = () => { //레이즈 상태 표시
+        return (
+            <button className="task-tooltip" id ="raiseState">{data.data.player[index].cal}</button>
+        )
+    }
+    const raiseInput2 = () => { //레이즈 상태 표시
+        return (
+            <button className="task-tooltip" id ="raiseState">{data.data.player[(index+1)%data.data.total_player].cal}</button>
+        )
+    }
+    const raiseInput3 = () => { //레이즈 상태 표시
+        return (
+
+            <button className="task-tooltip" id ="raiseState">{data.data.player[(index+2)%data.data.total_player].cal}</button>
+        )
+    }
+    const raiseInput4 = () => { //레이즈 상태 표시
+        return (
+            <button className="task-tooltip" id ="raiseState">{data.data.player[(index+3)%data.data.total_player].cal}</button>
+        )
+    }
+    const raiseInput5 = () => { //레이즈 상태 표시
+        return (
+            <button className="task-tooltip" id ="raiseState">{data.data.player[(index+4)%data.data.total_player].cal}</button>
+        )
+    }
+    const raiseInput6 = () => { //레이즈 상태 표시
+        return (
+            <button className="task-tooltip" id ="raiseState">{data.data.player[(index+5)%data.data.total_player].cal}</button>
         )
     }
     const checkInput = () => { //체크 상태 표시
@@ -397,9 +609,13 @@ const StartSix = () => {
                       reverseCard1={reverseCard1} reverseCard2={reverseCard2}
                       data={data} setData={setData} betBtn1={betBtn1} betBtn2={betBtn2} betBtn3={betBtn3}
                       phase3={phase3} phase4={phase4} phase5={phase5} time={time} start={start} foldInput={foldInput}
-                      checkInput={checkInput} callInput={callInput} allInput={allInput} raiseInput={raiseInput}
-                      fold={fold} check={check} rai={rai} call={call} all={all} timer1={timer1}
-
+                      checkInput={checkInput} callInput={callInput} allInput1={allInput1} allInput2={allInput2}
+                      allInput3={allInput3} allInput4={allInput4} allInput5={allInput5} allInput6={allInput6}
+                      raiseInput1={raiseInput1} raiseInput2={raiseInput2} raiseInput3={raiseInput3} raiseInput4={raiseInput4} raiseInput5={raiseInput5}
+                      raiseInput6={raiseInput6}
+                      fold={fold} check={check} rai={rai} call={call} all={all} timer1={timer1} a={a} bet1={bet1} bet2={bet2}
+                      bet3={bet3} bet4={bet4} bet5={bet5} bet6={bet6} phase6={phase6} user={user} playerBett={playerBett}
+                      index={index}
             />
         </div>
     );

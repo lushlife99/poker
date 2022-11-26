@@ -78,16 +78,13 @@ public class UpperGameService {
 
     @Transactional
     public Board 페이즈종료(Board board){
-        if(board.getPhaseNum() == 5){
-            게임끝(board);
-        }
-        else{
-            boardService.페이즈테이블세팅(board);
-        }
+
+        boardService.페이즈테이블세팅(board);
+
         return board;
     }
     @Transactional
-    public Board 게임끝(Board board){
+    public int[][] 게임끝(Board board){
         int jokBo[][] = gameService.족보계산하기(board);
         System.out.print("결과 : "+gameService.카드번역기(board.getCard1())+" ");
         System.out.print(gameService.카드번역기(board.getCard2())+" ");
@@ -104,19 +101,27 @@ public class UpperGameService {
             System.out.println((i+1)+"위 : " +rank[i]);
         }
         //팟분배만 하면 됨..
-        int result[][] = gameService.팟분배(board, rank);
-        for(int i = 0; i < result.length; i++){
-            System.out.println((i+1)+"위 : " +result[i][0]+" 얻은 스택 : "+result[i][1]);
+        int result2[][] = gameService.팟분배(board, rank);
+        for(int i = 0; i < result2.length; i++){
+            System.out.println((i+1)+"위 : " +result2[i][0]+" 얻은 스택 : "+result2[i][1]);
         }
         Player player;
-//        for(int i = 0; i < board.getTotal_player(); i++){
-//            player = board.getPlayer().get(i);
-//            player.setBoard(board);
-//            playerRepository.save(player);
-//        }
-        boardService.테이블세팅(board);
+
+        int[][] result = new int [board.getTotal_player()][8];
+        int id;
+        for(int i = 0; i < board.getTotal_player(); i++){
+            id = board.getPlayer().get(result2[i][0]).getId();   //id 가져옴 그게 0번째.
+            result[i][0] = id;
+            result[i][1] = result2[i][1];
+            result[i][2] = jokBo[result2[i][0]][0];
+            result[i][3] = jokBo[result2[i][0]][1];
+            result[i][4] = jokBo[result2[i][0]][2];
+            result[i][5] = jokBo[result2[i][0]][3];
+            result[i][6] = jokBo[result2[i][0]][4];
+            result[i][7] = jokBo[result2[i][0]][5];
+        }
         boardRepository.save(board);
-        return board;
+        return result;
     }
 
     @Transactional
