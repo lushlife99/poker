@@ -101,8 +101,9 @@ const SixTable = (props) => {
             {phase3()}
             {phase4()}
             {phase5()}
+            {phase6()}
 
         </div>
     );
 };
-export default SixTable;
+export default React.memo(SixTable);

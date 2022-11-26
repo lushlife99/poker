@@ -89,16 +89,16 @@ public class BoardApiController {
 
     @PutMapping("/api/board/determineWinner")
     public ResultResponseDto<int [][]> determineWinner(@RequestBody ResponseDto<Board> board){
+        System.out.println("실행됨");
         int result[][] = upperGameService.게임끝(board.getData());
         return new ResultResponseDto<>(result);
     }
 
     @PutMapping("/api/board/{id}")
     public DeferredResult<Board> joinGame(@PathVariable int id){
-        System.out.println("대기요청");
         DeferredResult<Board> output = new DeferredResult<>();
         try{
-            Thread.sleep(2500); //2초 기다림
+            Thread.sleep(2500); //2.5초 기다림
             Board board = boardRepository.findById(id).get();
             output.setResult(board);
         } catch (Exception e) {

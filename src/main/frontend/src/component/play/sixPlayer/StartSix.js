@@ -1,6 +1,7 @@
-import React, {useEffect, useState,useMemo} from 'react';
+import React, {useEffect, useState,useMemo} from 'react'
+import axios from 'axios'
 import SixTable from './SixTable';
-import axios from 'axios';
+
 import {useTimer} from 'use-timer';
 import {useCookies} from 'react-cookie';
 const StartSix = () => {
@@ -287,28 +288,23 @@ const StartSix = () => {
             document.getElementById("rc2_5").src = images[data.data.card5].src;
         }
     };
-    /*const result = () => {
-        for(int i=0;i<data.data.arr.length;i++) {
-            for(int j=0;j<data.data.arr[i].length;j++)
-
-        }
-    }*/
-
+    const [arr,setArr] = useState();
     const phase6 = () => {
         if(data&&data.data.phaseNum===6) {
+            console.log("페이즈6실행");
             axios.put('http://localhost:8080/api/board/determineWinner',{
                 data:data.data //data.data로
             }).then((response) => {
-                setData(response.data);
-                for(let i =0; i<data.data.arr.length; i++) {
-                    alert((i+1)+"등 player "+data.data.arr[i][0]+" 스택 : "+data.data.arr[i][1]+"족보 값 : "+data.data.arr[i][2]);
+                setArr(response.data);
+                console.log(response.data);
+                gameResult();
+                for(let i =0; i<arr.arr.length; i++) {
+                    alert((i+1)+"등 player "+arr.arr[i][0]+" 스택 : "+arr.arr[i][1]+"결과 : "+result);
                 }
             });
         }
-
-
-
     }
+
     const waitRequest = () => {  //대기하면서 서버에 요청
         axios.put('http://localhost:8080/api/board/1').then((res) => {
             setData(res);
@@ -600,6 +596,36 @@ const StartSix = () => {
         document.getElementById("allState").style.display='none';
         document.getElementById("raiseState").style.display='none';
     }
+    const [result,setResult] = useState();
+    const gameResult = () => {
+        for(let i =0;i<arr.arr.length;i++) {
+            if(arr.arr[i][2]===0)
+                setResult("폴드");
+            else if(arr.arr[i][2] ===1)
+                setResult("하이카드");
+            else if(arr.arr[i][2] ===2)
+                setResult("원페어");
+            else if(arr.arr[i][2] ===3)
+                setResult("투페어");
+            else if(arr.arr[i][2] ===4)
+                setResult("트리플");
+            else if(arr.arr[i][2] ===5)
+                setResult("스트레이트");
+            else if(arr.arr[i][2] ===6)
+                setResult("플러쉬");
+            else if(arr.arr[i][2] ===7)
+                setResult("풀하우스");
+            else if(arr.arr[i][2] ===8)
+                setResult("포카드")
+            else if(arr.arr[i][2] ===9)
+                setResult("스트레이트플러쉬");
+            else if(arr.arr[i][2] === 10)
+                setResult("로열스트레이트플러쉬");
+        }
+
+    }
+
+
     return (
         <div>
             <SixTable images={images} setImages={setImages} cardImg={cardImg}
@@ -620,4 +646,4 @@ const StartSix = () => {
         </div>
     );
 };
-export default StartSix;
+export default React.memo(StartSix);
